@@ -76,4 +76,49 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 
+@keyframes members-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.members-marquee {
+  position: relative;
+  overflow: hidden;
+}
+
+.members-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: members-scroll 38s linear infinite;
+}
+
+/* Pause on hover if user mouses over */
+.members-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* You can use this for a slightly faster row if you want */
+.members-marquee-track--fast {
+  animation-duration: 26s;
+}
+
+/* Member card base style */
+/* Member card base style */
+.member-card {
+  @apply relative mx-3 h-[380px] w-[260px] shrink-0 overflow-hidden
+    rounded-3xl border border-border/70 bg-surface/90 backdrop-blur
+    shadow-lg transition-all duration-500;
+}
+
+.member-card:hover {
+  box-shadow:
+    0 0 40px rgba(0, 245, 160, 0.18),
+    0 0 80px rgba(0, 198, 255, 0.14);
+  border-color: rgba(0, 245, 160, 0.6);
+  transform: translateY(-6px) scale(1.02);
+}
 

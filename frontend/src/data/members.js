@@ -1,25 +1,50 @@
 // src/data/members.js
 
-export const memberPositions = [
+export const memberGroups = [
     {
-      key: "steeringCommunityLeader",
-      label: "Steering Community Leader",
+      title: "Steering Community Leader",
       members: [
         {
           id: 1,
-          name: "Alice Sharma",
+          name: "The Boss",
           position: "Steering Community Leader",
           email: "alice@ethicalhck.org",
           github: "https://github.com/alice",
           linkedin: "https://linkedin.com/in/alice",
-          imageUrl: "/avatars/boss.png",
+          photo: "/avatars/boss.png",
         },
+        {
+            id: 2,
+            name: "Aleqwewice Sharma",
+            position: "Steering Community Leader",
+            email: "alice@ethicalhck.org",
+            github: "https://github.com/alice",
+            linkedin: "https://linkedin.com/in/alice",
+            photo: "/avatars/boss.png",
+          },
+          {
+            id: 3,
+            name: "Aliweqwce Sharma",
+            position: "Steering Community Leader",
+            email: "alice@ethicalhck.org",
+            github: "https://github.com/alice",
+            linkedin: "https://linkedin.com/in/alice",
+            photo: "/avatars/boss.png",
+          },
+          {
+            id: 4,
+            name: "Alieqwce Sharma",
+            position: "Steering Community Leader",
+            email: "alice@ethicalhck.org",
+            github: "https://github.com/alice",
+            linkedin: "https://linkedin.com/in/alice",
+            photo: "/avatars/boss.png",
+          },
       ],
     },
   
     {
-      key: "steeringDepartmentLead",
-      label: "Steering Department Lead",
+      title: "Steering Department Lead",
       members: [
         {
           id: 2,
@@ -28,7 +53,7 @@ export const memberPositions = [
           email: "rahul@ethicalhck.org",
           github: "https://github.com/rahul",
           linkedin: "https://linkedin.com/in/rahul",
-          imageUrl: "/avatars/boss.png",
+          photo: "/members/rahul.jpg",
         },
         {
           id: 3,
@@ -37,14 +62,13 @@ export const memberPositions = [
           email: "meera@ethicalhck.org",
           github: "https://github.com/meera",
           linkedin: "https://linkedin.com/in/meera",
-          imageUrl: "/members/meera.jpg",
+          photo: "/members/meera.jpg",
         },
       ],
     },
   
     {
-      key: "steeringDepartmentHead",
-      label: "Steering Department Head",
+      title: "Steering Department Head",
       members: [
         {
           id: 4,
@@ -53,7 +77,7 @@ export const memberPositions = [
           email: "priya@ethicalhck.org",
           github: "https://github.com/priya",
           linkedin: "https://linkedin.com/in/priya",
-          imageUrl: "/members/priya.jpg",
+          photo: "/members/priya.jpg",
         },
         {
           id: 5,
@@ -62,14 +86,13 @@ export const memberPositions = [
           email: "arjun@ethicalhck.org",
           github: "https://github.com/arjun",
           linkedin: "https://linkedin.com/in/arjun",
-          imageUrl: "/members/arjun.jpg",
+          photo: "/members/arjun.jpg",
         },
       ],
     },
   
     {
-      key: "communityMembers",
-      label: "Community Members",
+      title: "Community Members",
       members: [
         {
           id: 6,
@@ -78,7 +101,7 @@ export const memberPositions = [
           email: "kiran@ethicalhck.org",
           github: "https://github.com/kiran",
           linkedin: "https://linkedin.com/in/kiran",
-          imageUrl: "/members/kiran.jpg",
+          photo: "/members/kiran.jpg",
         },
         {
           id: 7,
@@ -87,7 +110,7 @@ export const memberPositions = [
           email: "ritika@ethicalhck.org",
           github: "https://github.com/ritika",
           linkedin: "https://linkedin.com/in/ritika",
-          imageUrl: "/members/ritika.jpg",
+          photo: "/members/ritika.jpg",
         },
         {
           id: 8,
@@ -96,7 +119,7 @@ export const memberPositions = [
           email: "bishal@ethicalhck.org",
           github: "https://github.com/bishal",
           linkedin: "https://linkedin.com/in/bishal",
-          imageUrl: "/members/bishal.jpg",
+          photo: "/members/bishal.jpg",
         },
         {
           id: 9,
@@ -105,7 +128,7 @@ export const memberPositions = [
           email: "sneha@ethicalhck.org",
           github: "https://github.com/sneha",
           linkedin: "https://linkedin.com/in/sneha",
-          imageUrl: "/members/sneha.jpg",
+          photo: "/members/sneha.jpg",
         },
         {
           id: 10,
@@ -114,7 +137,7 @@ export const memberPositions = [
           email: "aakash@ethicalhck.org",
           github: "https://github.com/aakash",
           linkedin: "https://linkedin.com/in/aakash",
-          imageUrl: "/members/aakash.jpg",
+          photo: "/members/aakash.jpg",
         },
         {
           id: 11,
@@ -123,7 +146,7 @@ export const memberPositions = [
           email: "nirjala@ethicalhck.org",
           github: "https://github.com/nirjala",
           linkedin: "https://linkedin.com/in/nirjala",
-          imageUrl: "/members/nirjala.jpg",
+          photo: "/members/nirjala.jpg",
         },
         {
           id: 12,
@@ -132,7 +155,7 @@ export const memberPositions = [
           email: "roshan@ethicalhck.org",
           github: "https://github.com/roshan",
           linkedin: "https://linkedin.com/in/roshan",
-          imageUrl: "/members/roshan.jpg",
+          photo: "/members/roshan.jpg",
         },
         {
           id: 13,
@@ -141,7 +164,7 @@ export const memberPositions = [
           email: "ayush@ethicalhck.org",
           github: "https://github.com/ayush",
           linkedin: "https://linkedin.com/in/ayush",
-          imageUrl: "/members/ayush.jpg",
+          photo: "/members/ayush.jpg",
         },
         {
           id: 14,
@@ -150,7 +173,7 @@ export const memberPositions = [
           email: "shristi@ethicalhck.org",
           github: "https://github.com/shristi",
           linkedin: "https://linkedin.com/in/shristi",
-          imageUrl: "/members/shristi.jpg",
+          photo: "/members/shristi.jpg",
         },
         {
           id: 15,
@@ -159,14 +182,13 @@ export const memberPositions = [
           email: "bibek@ethicalhck.org",
           github: "https://github.com/bibek",
           linkedin: "https://linkedin.com/in/bibek",
-          imageUrl: "/members/bibek.jpg",
+          photo: "/members/bibek.jpg",
         },
       ],
     },
   
     {
-      key: "generalMembers",
-      label: "General Members",
+      title: "General Members",
       members: [
         {
           id: 16,
@@ -175,7 +197,7 @@ export const memberPositions = [
           email: "sujan@ethicalhck.org",
           github: "https://github.com/sujan",
           linkedin: "https://linkedin.com/in/sujan",
-          imageUrl: "/members/sujan.jpg",
+          photo: "/members/sujan.jpg",
         },
         {
           id: 17,
@@ -184,7 +206,7 @@ export const memberPositions = [
           email: "manish@ethicalhck.org",
           github: "https://github.com/manish",
           linkedin: "https://linkedin.com/in/manish",
-          imageUrl: "/members/manish.jpg",
+          photo: "/members/manish.jpg",
         },
         {
           id: 18,
@@ -193,7 +215,7 @@ export const memberPositions = [
           email: "reeya@ethicalhck.org",
           github: "https://github.com/reeya",
           linkedin: "https://linkedin.com/in/reeya",
-          imageUrl: "/members/reeya.jpg",
+          photo: "/members/reeya.jpg",
         },
         {
           id: 19,
@@ -202,7 +224,7 @@ export const memberPositions = [
           email: "deepak@ethicalhck.org",
           github: "https://github.com/deepak",
           linkedin: "https://linkedin.com/in/deepak",
-          imageUrl: "/members/deepak.jpg",
+          photo: "/members/deepak.jpg",
         },
         {
           id: 20,
@@ -211,7 +233,7 @@ export const memberPositions = [
           email: "shraddha@ethicalhck.org",
           github: "https://github.com/shraddha",
           linkedin: "https://linkedin.com/in/shraddha",
-          imageUrl: "/members/shraddha.jpg",
+          photo: "/members/shraddha.jpg",
         },
         {
           id: 21,
@@ -220,7 +242,7 @@ export const memberPositions = [
           email: "bijay@ethicalhck.org",
           github: "https://github.com/bijay",
           linkedin: "https://linkedin.com/in/bijay",
-          imageUrl: "/members/bijay.jpg",
+          photo: "/members/bijay.jpg",
         },
         {
           id: 22,
@@ -229,7 +251,7 @@ export const memberPositions = [
           email: "asmita@ethicalhck.org",
           github: "https://github.com/asmita",
           linkedin: "https://linkedin.com/in/asmita",
-          imageUrl: "/members/asmita.jpg",
+          photo: "/members/asmita.jpg",
         },
         {
           id: 23,
@@ -238,7 +260,7 @@ export const memberPositions = [
           email: "rohan@ethicalhck.org",
           github: "https://github.com/rohan",
           linkedin: "https://linkedin.com/in/rohan",
-          imageUrl: "/members/rohan.jpg",
+          photo: "/members/rohan.jpg",
         },
         {
           id: 24,
@@ -247,7 +269,7 @@ export const memberPositions = [
           email: "karishma@ethicalhck.org",
           github: "https://github.com/karishma",
           linkedin: "https://linkedin.com/in/karishma",
-          imageUrl: "/members/karishma.jpg",
+          photo: "/members/karishma.jpg",
         },
         {
           id: 25,
@@ -256,14 +278,9 @@ export const memberPositions = [
           email: "yogesh@ethicalhck.org",
           github: "https://github.com/yogesh",
           linkedin: "https://linkedin.com/in/yogesh",
-          imageUrl: "/members/yogesh.jpg",
+          photo: "/members/yogesh.jpg",
         },
       ],
     },
   ];
-  
-  // flattened list for "View All Members" page
-  export const allMembers = memberPositions.flatMap((group) =>
-    group.members.map((m) => ({ ...m, group: group.label }))
-  );
   
