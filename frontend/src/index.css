@@ -122,3 +122,78 @@ body {
   transform: translateY(-6px) scale(1.02);
 }
 
+/* Pause marquee on hover AND touch */
+.members-marquee:focus .members-marquee-track,
+.members-marquee:active .members-marquee-track,
+.members-marquee:hover .members-marquee-track {
+  animation-play-state: paused !important;
+}
+
+/* Animated centered title */
+.animated-title {
+  opacity: 0;
+  animation: fadeInTitle 1s ease forwards;
+}
+
+@keyframes fadeInTitle {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Cyber Neon Sweep Line === */
+.perspective-700 {
+  perspective: 700px;
+}
+
+
+.group-title-line {
+  position: relative;
+  width: 100%;
+  height: 5px;
+  background: rgba(0, 140, 255, 0.08); /* subtle base line */
+  overflow: hidden;
+  border-radius: 9999px;
+}
+
+.group-title-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -40%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #00c6ff, #00f5a0, transparent);
+  filter: blur(4px);
+  animation: neonSweep 3s linear infinite;
+}
+
+/* Pause on hover */
+.group-title-line:hover::after {
+  animation-play-state: paused;
+}
+
+@keyframes neonSweep {
+  0% {
+    transform: translateX(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(220%);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300%);
+    opacity: 0.4;
+  }
+}
+
+/* Neon glow shadows for footer icons */
+.shadow-neon-green { box-shadow: 0 0 6px #00f5a0, 0 0 12px #00f5a0; }
+.shadow-neon-blue { box-shadow: 0 0 6px #00c6ff, 0 0 12px #00c6ff; }
+.shadow-neon-cyan { box-shadow: 0 0 6px #22d3ee, 0 0 12px #22d3ee; }

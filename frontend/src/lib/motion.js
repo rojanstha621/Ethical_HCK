@@ -1,3 +1,5 @@
+// src/lib/motion.js
+
 export const fadeUp = {
     hidden: { opacity: 0, y: 24 },
     visible: {
@@ -13,6 +15,14 @@ export const fadeUp = {
       transition: {
         staggerChildren: 0.12,
       },
+    },
+  };
+  
+  export const fadeIn = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.5, ease: "easeOut" },
     },
   };
   

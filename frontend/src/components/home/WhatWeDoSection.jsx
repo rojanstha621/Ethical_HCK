@@ -1,62 +1,78 @@
+// src/components/home/WhatWeDoSection.jsx
+
 import React from "react";
 import { motion } from "framer-motion";
-import { ShieldCheck, Terminal, RadioTower, Search } from "lucide-react";
-import { fadeUp, staggerContainer } from "../../lib/motion.js";
+import { staggerContainer, fadeUp, fadeIn } from "../../lib/motion.js";
+import {
+  Shield,
+  Bug,
+  Lock,
+  Radio,
+  Globe2,
+  ArrowRight,
+} from "lucide-react";
 
 const items = [
   {
-    label: "Workshops & Labs",
-    title: "Hands-on Technical Sessions",
-    icon: Terminal,
+    id: "workshops",
+    label: "Hands-on Workshops",
+    title: "Workshops & Labs",
     description:
-      "Focused labs on web security, Linux, networking, OSINT, and practical ethical hacking workflows.",
-    points: [
-      "Small, focused groups",
-      "Tool-driven practice",
-      "Beginner-friendly on-ramps",
-    ],
+      "Deep-dive sessions on topics like web security, dark web exploration, digital forensics, and more — focused on ethical use only.",
+    highlight: "Practice over theory, every time.",
+    icon: Shield,
+    href: "/events#workshops",
+    tag: "Skill-building",
   },
   {
-    label: "Events & CTFs",
-    title: "Challenges, Talks, and CTFs",
-    icon: ShieldCheck,
+    id: "ctf",
+    label: "Capture The Flag",
+    title: "CTFs & Challenges",
     description:
-      "Curated events that combine talks, guided demos, and competitive problem-solving in a safe environment.",
-    points: [
-      "CTF-style challenges",
-      "Invited speakers",
-      "Dark web & forensics themes",
-    ],
+      "Small, focused CTFs and challenge sets that help members think like defenders and attackers, without crossing ethical lines.",
+    highlight: "Think, break, understand, secure.",
+    icon: Bug,
+    href: "/events#ctf",
+    tag: "Problem-solving",
   },
   {
-    label: "Projects & Research",
-    title: "Community-driven Initiatives",
-    icon: Search,
+    id: "projects",
+    label: "Community Projects",
+    title: "Projects & Initiatives",
     description:
-      "Longer-term initiatives around security tooling, analysis, and documentation of real-world attack surfaces.",
-    points: [
-      "Collaborative repositories",
-      "Student-led experiments",
-      "Practical write-ups",
-    ],
+      "Collaborative builds like demo web apps, monitoring tools, and security awareness campaigns under senior guidance.",
+    highlight: "From idea to working prototype.",
+    icon: Globe2,
+    href: "/projects",
+    tag: "Build & ship",
   },
   {
-    label: "Awareness & Outreach",
-    title: "Security Awareness Programs",
-    icon: RadioTower,
+    id: "research",
+    label: "Guided Research",
+    title: "Research & Reading Circles",
     description:
-      "Sessions and campaigns focused on digital hygiene, privacy, and responsible technology use.",
-    points: [
-      "Campus awareness drives",
-      "Non-technical audiences",
-      "Legal & ethical framing",
-    ],
+      "Small groups exploring topics like threat intelligence, malware analysis basics, and privacy — slowly and carefully.",
+    highlight: "Not rushing. Deep, patient learning.",
+    icon: Radio,
+    href: "/projects#research",
+    tag: "Deep work",
+  },
+  {
+    id: "awareness",
+    label: "Campus Awareness",
+    title: "Security Awareness & Outreach",
+    description:
+      "Talks, demos, and campaigns aimed at helping students and staff stay safer online, in a language they actually understand.",
+    highlight: "Awareness before incident.",
+    icon: Lock,
+    href: "/events#awareness",
+    tag: "Community-facing",
   },
 ];
 
 function WhatWeDoSection() {
   return (
-    <section id="what-we-do" className="py-14 md:py-18">
+    <section className="py-10 md:py-16">
       <motion.div
         className="space-y-8"
         variants={staggerContainer}
@@ -67,77 +83,112 @@ function WhatWeDoSection() {
         {/* Header */}
         <motion.div
           variants={fadeUp}
-          className="max-w-2xl space-y-3"
+          className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
         >
-          <p className="text-[11px] font-mono uppercase tracking-[0.25em] text-accent-green/80">
-            What We Do
-          </p>
-          <h2 className="font-heading text-2xl md:text-3xl">
-            Quiet, focused, security work.
-          </h2>
-          <p className="text-sm md:text-[15px] text-text-muted">
-            The community is structured around a few core activities: technical
-            sessions, events, long-term projects, and awareness work. No noise,
-            just deliberate practice.
-          </p>
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-green" />
+              What we do
+            </div>
+            <div className="space-y-1">
+              <h2 className="font-heading text-2xl md:text-3xl">
+                Focused on learning, not noise.
+              </h2>
+              <p className="max-w-xl text-sm text-text-muted">
+                The community runs a small but consistent set of activities:
+                workshops, CTF-style problem solving, guided projects, and
+                security awareness work across campus.
+              </p>
+            </div>
+          </div>
+
+          <motion.div
+            variants={fadeIn}
+            className="hidden text-xs text-text-muted md:flex md:flex-col md:items-end"
+          >
+            <span className="font-mono uppercase tracking-[0.18em]">
+              Learn • Research • Build • Secure
+            </span>
+            <span className="mt-1 text-[11px] text-text-muted/80">
+              Cards below are clickable and lead to events or projects.
+            </span>
+          </motion.div>
         </motion.div>
 
-        {/* Grid */}
+        {/* Cards: horizontal scroll on mobile, grid on desktop */}
         <motion.div
-          className="grid gap-5 md:grid-cols-2"
-          variants={staggerContainer}
+          variants={fadeIn}
+          className="-mx-4 flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible"
         >
           {items.map((item, index) => {
             const Icon = item.icon;
             return (
-              <motion.article
-                key={item.label}
+              <motion.a
+                key={item.id}
+                href={item.href}
                 variants={fadeUp}
-                className="group glass-panel relative overflow-hidden p-5 transition-transform duration-300 hover:-translate-y-1"
+                custom={index}
+                className="group relative min-w-[80%] snap-start rounded-2xl border border-border/70 bg-surface/80 shadow-lg shadow-black/20 transition-transform hover:-translate-y-1 hover:border-accent-green/60 hover:shadow-soft-glow md:min-w-0 md:rounded-2xl"
+                whileHover={{ translateY: -6 }}
+                transition={{ type: "spring", stiffness: 130, damping: 18 }}
               >
-                {/* subtle gradient strip */}
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-accent-green/40 via-accent-blue/40 to-accent-green/30" />
+                {/* gradient ring */}
+                <div className="pointer-events-none absolute -inset-[1px] rounded-2xl bg-[radial-gradient(circle_at_top,_rgba(0,245,160,0.3),transparent_60%),radial-gradient(circle_at_bottom,_rgba(0,198,255,0.2),transparent_55%)] opacity-0 blur-[2px] transition-opacity duration-300 group-hover:opacity-100" />
 
-                <div className="flex items-start gap-4">
-                  <div className="mt-1 flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-background/80">
-                    <Icon className="h-4 w-4 text-accent-green" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted">
-                      {item.label}
+                <div className="relative flex h-full flex-col p-4 md:p-5">
+                  {/* top row: icon + tag */}
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-background/80 border border-border/80">
+                        <Icon className="h-4 w-4 text-accent-green transition-colors duration-300 group-hover:text-accent-blue" />
+                      </div>
+                      <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted">
+                        {item.label}
+                      </span>
                     </div>
-                    <h3 className="font-heading text-base md:text-lg">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs md:text-[13px] text-text-muted">
-                      {item.description}
+                    <span className="rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] text-text-muted">
+                      {item.tag}
+                    </span>
+                  </div>
+
+                  {/* title + description */}
+                  <h3 className="font-heading text-base md:text-lg">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-xs md:text-sm text-text-muted">
+                    {item.description}
+                  </p>
+
+                  {/* highlight + read more */}
+                  <div className="mt-4 flex flex-1 flex-col justify-end gap-2 text-xs">
+                    <p className="text-[11px] text-accent-green/80">
+                      {item.highlight}
                     </p>
-                    <ul className="mt-3 space-y-1.5 text-[11px] text-text-muted/90">
-                      {item.points.map((point) => (
-                        <li
-                          key={point}
-                          className="flex items-center gap-2"
-                        >
-                          <span className="h-1 w-1 rounded-full bg-accent-blue/80" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/80">
+                        {index + 1 < 10 ? `0${index + 1}` : index + 1}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono tracking-[0.12em] text-accent-blue/0 translate-x-2 opacity-0 transition-all duration-300 group-hover:text-accent-blue group-hover:translate-x-0 group-hover:opacity-100">
+                        Read more
+                        <ArrowRight className="h-3 w-3" />
+                      </span>
+                    </div>
                   </div>
                 </div>
-
-                {/* corner index */}
-                <div className="pointer-events-none absolute bottom-3 right-4 text-[10px] font-mono uppercase tracking-[0.18em] text-text-muted/60">
-                  {String(index + 1).padStart(2, "0")}
-                </div>
-
-                {/* faint hover glow */}
-                <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute -bottom-10 left-1/2 h-24 w-24 -translate-x-1/2 rounded-full bg-accent-blue/10 blur-3xl" />
-                </div>
-              </motion.article>
+              </motion.a>
             );
           })}
+        </motion.div>
+
+        {/* Mobile hint */}
+        <motion.div
+          variants={fadeIn}
+          className="mt-1 flex items-center justify-between text-[11px] text-text-muted md:hidden"
+        >
+          <span>Swipe horizontally to see more.</span>
+          <span className="font-mono uppercase tracking-[0.16em]">
+            Learn • Build • Secure
+          </span>
         </motion.div>
       </motion.div>
     </section>
