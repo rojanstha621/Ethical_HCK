@@ -12,7 +12,7 @@ function Footer() {
 
       <div className="container-cyber">
         {/* Inner gradient divider */}
-        <div className="mb-8 h-px w-full bg-gradient-to-r from-accent-green/70 via-accent-blue/60 to-accent-green/70" />
+        <div className="mb-8 h-px w-full bg-gradient-to-r from-accent-red/70 via-accent-red/60 to-accent-red/70" />
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Brand & About */}
@@ -31,7 +31,7 @@ function Footer() {
                 href="https://github.com/ethicalhck"
                 target="_blank"
                 rel="noreferrer"
-                className="text-text-muted transition hover:text-accent-green"
+                className="text-text-muted transition hover:text-accent-red"
               >
                 <Github className="h-5 w-5" />
               </a>
@@ -39,7 +39,7 @@ function Footer() {
                 href="https://linkedin.com/company/ethicalhck"
                 target="_blank"
                 rel="noreferrer"
-                className="text-text-muted transition hover:text-accent-blue"
+                className="text-text-muted transition hover:text-accent-red"
               >
                 <Linkedin className="h-5 w-5" />
               </a>
@@ -47,7 +47,7 @@ function Footer() {
                 href="https://twitter.com/ethicalhck"
                 target="_blank"
                 rel="noreferrer"
-                className="text-text-muted transition hover:text-accent-blue"
+                className="text-text-muted transition hover:text-accent-red"
               >
                 <Twitter className="h-5 w-5" />
               </a>
@@ -74,29 +74,29 @@ function Footer() {
             </h4>
             <ul className="space-y-1 text-sm text-text-muted">
               <li>
-                <a href="/about" className="transition hover:text-accent-blue">
+                <a href="/about" className="transition hover:text-accent-red">
                   About
                 </a>
               </li>
               <li>
-                <a href="/members" className="transition hover:text-accent-blue">
+                <a href="/members" className="transition hover:text-accent-red">
                   Members
                 </a>
               </li>
               <li>
-                <a href="/events" className="transition hover:text-accent-blue">
+                <a href="/events" className="transition hover:text-accent-red">
                   Events
                 </a>
               </li>
               <li>
-                <a href="/projects" className="transition hover:text-accent-blue">
+                <a href="/projects" className="transition hover:text-accent-red">
                   Projects
                 </a>
               </li>
               <li>
                 <a
                   href="/resources"
-                  className="transition hover:text-accent-blue"
+                  className="transition hover:text-accent-red"
                 >
                   Resources
                 </a>
@@ -113,7 +113,7 @@ function Footer() {
               Email:{" "}
               <a
                 href="mailto:contact@ethicalhck.org"
-                className="transition hover:text-accent-green"
+                className="transition hover:text-accent-red"
               >
                 contact@ethicalhck.org
               </a>
@@ -122,7 +122,7 @@ function Footer() {
               Phone:{" "}
               <a
                 href="tel:+9779812345678"
-                className="transition hover:text-accent-green"
+                className="transition hover:text-accent-red"
               >
                 +977 9812345678
               </a>
@@ -142,11 +142,11 @@ function Footer() {
               <input
                 type="email"
                 placeholder="Your email"
-                className="flex-1 rounded-lg border border-border bg-background/80 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent-blue"
+                className="flex-1 rounded-lg border border-border bg-background/80 px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-accent-red"
               />
               <button
                 type="submit"
-                className="rounded-lg bg-accent-green px-4 py-2 text-sm font-medium text-black shadow-md shadow-accent-green/30 transition hover:scale-[1.02]"
+                className="rounded-lg bg-accent-red px-4 py-2 text-sm font-medium text-black shadow-md shadow-accent-red/30 transition hover:scale-[1.02]"
               >
                 Subscribe
               </button>

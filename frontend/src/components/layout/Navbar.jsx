@@ -12,15 +12,15 @@ const navItems = [
 function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-30 border-b border-border/80 bg-background/80 backdrop-blur">
-      {/* subtle gradient line at bottom */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-accent-green via-accent-blue to-accent-green opacity-70" />
+      {/* subtle red line at bottom */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-accent-red opacity-30" />
 
       <div className="container-cyber flex h-16 items-center justify-between gap-4">
         {/* Left: Logo / wordmark */}
         <div className="flex items-center gap-3">
           <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface/80 shadow-inner">
-            <div className="absolute inset-0 rounded-2xl bg-[conic-gradient(from_180deg_at_50%_50%,rgba(0,245,160,0.32),transparent_40%,rgba(0,198,255,0.32),transparent_80%)] opacity-30 blur-md" />
-            <Shield className="relative h-5 w-5 text-accent-green" />
+            <div className="absolute inset-0 rounded-2xl bg-accent-red opacity-20 blur-md" />
+            <Shield className="relative h-5 w-5 text-accent-red" />
           </div>
           <div className="leading-tight">
             <div className="font-heading text-base uppercase tracking-[0.28em] text-text-primary">
@@ -44,8 +44,8 @@ function Navbar() {
                   [
                     "relative px-2 text-xs font-medium uppercase tracking-[0.18em]",
                     "text-text-muted transition-colors",
-                    "hover:text-text-primary",
-                    isActive ? "text-text-primary" : "",
+                    "hover:text-accent-red",
+                    isActive ? "text-accent-red" : "",
                   ].join(" ")
                 }
               >
@@ -63,18 +63,23 @@ function Navbar() {
 
         {/* Right: tiny status pill */}
         <div className="hidden md:flex items-center gap-2 text-[11px] font-mono text-text-muted">
-          <span className="h-2 w-2 rounded-full bg-accent-green animate-pulse" />
+          <span className="h-2 w-2 rounded-full bg-accent-red animate-pulse" />
           <span className="uppercase tracking-[0.18em]">
             community online
           </span>
         </div>
 
-        {/* Mobile: only logo + simple menu hint (no actual drawer yet) */}
+        {/* Mobile: Hamburger menu */}
         <div className="flex items-center gap-2 md:hidden">
-          <span className="text-[10px] font-mono uppercase tracking-[0.18em] text-text-muted">
-            Menu
-          </span>
-          <span className="h-1 w-5 rounded-full bg-gradient-to-r from-accent-green to-accent-blue" />
+          <button
+            type="button"
+            className="flex flex-col gap-1.5 p-2"
+            aria-label="Menu"
+          >
+            <span className="h-0.5 w-6 rounded-full bg-accent-red transition-all" />
+            <span className="h-0.5 w-6 rounded-full bg-accent-red transition-all" />
+            <span className="h-0.5 w-6 rounded-full bg-accent-red transition-all" />
+          </button>
         </div>
       </div>
     </header>

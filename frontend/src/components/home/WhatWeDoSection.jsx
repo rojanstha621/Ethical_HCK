@@ -87,7 +87,7 @@ function WhatWeDoSection() {
         >
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent-green" />
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-red" />
               What we do
             </div>
             <div className="space-y-1">
@@ -128,7 +128,7 @@ function WhatWeDoSection() {
                 href={item.href}
                 variants={fadeUp}
                 custom={index}
-                className="group relative min-w-[80%] snap-start rounded-2xl border border-border/70 bg-surface/80 shadow-lg shadow-black/20 transition-transform hover:-translate-y-1 hover:border-accent-green/60 hover:shadow-soft-glow md:min-w-0 md:rounded-2xl"
+                className="group relative min-w-[80%] snap-start rounded-2xl border border-border/70 bg-surface/80 shadow-lg shadow-black/20 transition-transform hover:-translate-y-1 hover:border-accent-red/60 hover:shadow-soft-glow md:min-w-0 md:rounded-2xl"
                 whileHover={{ translateY: -6 }}
                 transition={{ type: "spring", stiffness: 130, damping: 18 }}
               >
@@ -140,7 +140,7 @@ function WhatWeDoSection() {
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-3">
                       <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-background/80 border border-border/80">
-                        <Icon className="h-4 w-4 text-accent-green transition-colors duration-300 group-hover:text-accent-blue" />
+                        <Icon className="h-4 w-4 text-accent-red transition-colors duration-300 group-hover:text-accent-redLight" />
                       </div>
                       <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted">
                         {item.label}
@@ -161,14 +161,14 @@ function WhatWeDoSection() {
 
                   {/* highlight + read more */}
                   <div className="mt-4 flex flex-1 flex-col justify-end gap-2 text-xs">
-                    <p className="text-[11px] text-accent-green/80">
+                    <p className="text-[11px] text-accent-red/80">
                       {item.highlight}
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/80">
                         {index + 1 < 10 ? `0${index + 1}` : index + 1}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono tracking-[0.12em] text-accent-blue/0 translate-x-2 opacity-0 transition-all duration-300 group-hover:text-accent-blue group-hover:translate-x-0 group-hover:opacity-100">
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono tracking-[0.12em] text-accent-red/0 translate-x-2 opacity-0 transition-all duration-300 group-hover:text-accent-red group-hover:translate-x-0 group-hover:opacity-100">
                         Read more
                         <ArrowRight className="h-3 w-3" />
                       </span>

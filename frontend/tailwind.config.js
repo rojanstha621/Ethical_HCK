@@ -7,16 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "#050509",
-        surface: "#0B0F19",
-        border: "#1F2933",
+        background: "#000000",
+        surface: "#0A0A0A",
+        border: "#1A1A1A",
         accent: {
-          green: "#00F5A0",
-          blue: "#00C6FF",
+          red: "#FF0000",
+          redLight: "#FF3333",
+          redDark: "#CC0000",
         },
         text: {
-          primary: "#F9FAFB",
-          muted: "#9CA3AF",
+          primary: "#FFFFFF",
+          muted: "#CCCCCC",
+          secondary: "#999999",
         },
       },
       fontFamily: {

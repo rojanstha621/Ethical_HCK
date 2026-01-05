@@ -10,12 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "framer-motion": "^12.23.25",
     "lucide-react": "^0.556.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.10.1",
     "react-tsparticles": "^2.12.2",
+    "three": "^0.182.0",
     "tsparticles": "^3.9.1"
   },
   "devDependencies": {

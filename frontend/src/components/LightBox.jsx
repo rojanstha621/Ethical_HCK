@@ -28,7 +28,7 @@ export default function Lightbox({ src, onClose }) {
       >
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 text-accent-green hover:text-white"
+          className="absolute -top-12 right-0 text-accent-red hover:text-white"
         >
           <X />
         </button>
@@ -36,7 +36,7 @@ export default function Lightbox({ src, onClose }) {
         <img
           src={src}
           alt="Event"
-          className="w-full max-h-[80vh] object-contain rounded-lg border border-accent-green/30"
+          className="w-full max-h-[80vh] object-contain rounded-lg border border-accent-red/30"
         />
       </motion.div>
     </motion.div>
