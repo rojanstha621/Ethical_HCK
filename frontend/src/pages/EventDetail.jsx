@@ -46,6 +46,30 @@ function EventDetail() {
     });
   };
 
+  const renderDescriptionWithLinks = (text) => {
+    if (!text) return "";
+    // Regex to detect URLs (http/https)
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    return text.split(urlRegex).map((part, index) => {
+      if (part.match(urlRegex)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent-red hover:underline break-all"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background pt-20 pb-20 flex items-center justify-center">
@@ -228,7 +252,7 @@ function EventDetail() {
                       {section.sectionName}
                     </h2>
                     <div className="text-text-primary leading-relaxed whitespace-pre-line">
-                      {section.description}
+                      {renderDescriptionWithLinks(section.description)}
                     </div>
                   </motion.div>
                 ))

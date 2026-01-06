@@ -7,7 +7,7 @@ import Lightbox from "../components/LightBox.jsx";
 import { convertDriveLinkToImageUrl } from "../utils/imageUtils.js";
 
 /* ---------------- Constants ---------------- */
-const EVENTS_PER_PAGE = 6;
+
 
 /* ---------------- Animations ---------------- */
 const slideIn = (side) => ({
@@ -23,9 +23,7 @@ export default function Events() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(EVENTS_PER_PAGE);
   const navigate = useNavigate();
-  const showMoreRef = useRef(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -49,23 +47,9 @@ export default function Events() {
     fetchEvents();
   }, []);
 
-  // Get visible events based on current count
-  const visibleEvents = useMemo(() => {
-    return events.slice(0, visibleCount);
-  }, [events, visibleCount]);
-
-  const hasMoreEvents = visibleCount < events.length;
-  const remainingEvents = events.length - visibleCount;
-
-  const handleShowMore = () => {
-    setVisibleCount((prev) => Math.min(prev + EVENTS_PER_PAGE, events.length));
-    // Scroll to show new events after a short delay
-    setTimeout(() => {
-      if (showMoreRef.current) {
-        showMoreRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }, 100);
-  };
+  const sortedEvents = useMemo(() => {
+    return [...events].sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, [events]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -97,72 +81,43 @@ export default function Events() {
 
   return (
     <div className="pt-20 relative min-h-screen">
-      <main className="h-[calc(100vh-80px)] overflow-y-auto snap-y snap-mandatory no-scrollbar">
-        {visibleEvents.map((event, index) => (
-          <EventSlide
-            key={event._id || event.id}
-            event={event}
-            index={index}
-            openLightbox={setLightbox}
-            navigate={navigate}
-            formatDate={formatDate}
-          />
-        ))}
-
-        {/* Show More Section */}
-        {hasMoreEvents && (
-          <section
-            ref={showMoreRef}
-            className="snap-start min-h-[calc(100vh-100px)] flex items-center justify-center overflow-hidden relative"
+      <main className="space-y-24 pb-20">
+        {/* Hero Section */}
+        <section className="py-10 md:py-20 relative">
+          <motion.div
+            className="max-w-4xl space-y-4 mx-auto text-center px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center space-y-8 p-10 rounded-2xl bg-black/70 backdrop-blur-md border border-white/10"
-            >
-              <div className="space-y-2">
-                <p className="text-text-muted text-sm font-mono uppercase tracking-[0.2em]">
-                  {remainingEvents} more event{remainingEvents > 1 ? "s" : ""} to explore
-                </p>
-                <h2 className="font-heading text-3xl md:text-4xl text-text-primary">
-                  Want to see more?
-                </h2>
-              </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted mx-auto">
+              <Calendar className="h-3 w-3 text-accent-red" />
+              Events & Workshops
+            </div>
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-text-primary">
+              Our <span className="gradient-text">Events</span>
+            </h1>
+            <p className="text-base md:text-lg text-text-muted max-w-2xl leading-relaxed mx-auto">
+              Join our interactive workshops, capture the flag competitions, and expert talks.
+              Stay ahead in the cybersecurity game.
+            </p>
 
-              <motion.button
-                onClick={handleShowMore}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 border-accent-red bg-accent-red/10 text-accent-red text-lg font-mono uppercase tracking-[0.15em] hover:bg-accent-red hover:text-white transition-all duration-300 group"
-              >
-                <span>Show More Events</span>
-                <ChevronDown className="h-5 w-5 group-hover:animate-bounce" />
-              </motion.button>
 
-              <p className="text-text-muted/60 text-xs">
-                Showing {visibleCount} of {events.length} events
-              </p>
-            </motion.div>
-          </section>
-        )}
+          </motion.div>
+        </section>
 
-        {/* End Message when all events are shown */}
-        {!hasMoreEvents && events.length > EVENTS_PER_PAGE && (
-          <section className="snap-start min-h-[50vh] flex items-center justify-center overflow-hidden relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center space-y-4"
-            >
-              <p className="text-text-muted text-sm font-mono uppercase tracking-[0.2em]">
-                You've seen all {events.length} events
-              </p>
-              <div className="w-16 h-1 bg-accent-red/50 mx-auto rounded-full" />
-            </motion.div>
-          </section>
-        )}
+        <div className="space-y-24">
+          {sortedEvents.map((event, index) => (
+            <EventSlide
+              key={event._id || event.id}
+              event={event}
+              index={index}
+              openLightbox={setLightbox}
+              navigate={navigate}
+              formatDate={formatDate}
+            />
+          ))}
+        </div>
       </main>
 
       {lightbox && <Lightbox src={lightbox} onClose={() => setLightbox(null)} />}
@@ -172,7 +127,8 @@ export default function Events() {
 
 /* ---------------- Event Slide ---------------- */
 function EventSlide({ event, index, openLightbox, navigate, formatDate }) {
-  const isRight = index % 2 === 0;
+  const isRight = index % 2 !== 0; // Alternating layout: 0=Left(Image First), 1=Right(Text First)
+  const isUpcoming = new Date(event.date) >= new Date(); // Check if event is upcoming
   const image = event.image ? convertDriveLinkToImageUrl(event.image) : null;
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -185,17 +141,17 @@ function EventSlide({ event, index, openLightbox, navigate, formatDate }) {
   return (
     <section
       ref={ref}
-      className="snap-start min-h-[calc(100vh-100px)] flex items-center overflow-hidden relative"
+      className="flex items-center relative py-10"
     >
-      <div className="container-cyber max-w-6xl -translate-y-10">
+      <div className="container-cyber max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
           {/* IMAGE */}
           <motion.div
             style={{ y }}
             onClick={() => image && openLightbox(image)}
-            className={["relative", isRight ? "lg:order-1" : "lg:order-2", image ? "cursor-pointer group" : ""].join(" ")}
+            className={["relative", isRight ? "lg:order-2" : "lg:order-1", image ? "cursor-pointer group" : ""].join(" ")}
           >
-            <div className="overflow-hidden rounded-xl border border-accent-red/30 shadow-lg shadow-accent-red/20 h-[300px] lg:h-[420px]">
+            <div className="overflow-hidden rounded-xl border border-accent-red/30 shadow-lg shadow-accent-red/20 h-[300px] lg:h-[420px] relative">
               {image ? (
                 <img
                   src={image}
@@ -208,12 +164,23 @@ function EventSlide({ event, index, openLightbox, navigate, formatDate }) {
                   <span className="text-xs font-mono uppercase tracking-[0.2em] text-text-muted/50">No Image</span>
                 </div>
               )}
-              {/* Featured Badge */}
-              {event.showOnHomepage && (
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-accent-red/90 text-white text-xs font-medium backdrop-blur">
-                  Featured
-                </div>
-              )}
+
+              {/* Badges Container */}
+              <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
+                {/* Featured Badge */}
+                {event.showOnHomepage && (
+                  <div className="px-3 py-1 rounded-full bg-accent-red/90 text-white text-xs font-medium backdrop-blur shadow-lg">
+                    Featured
+                  </div>
+                )}
+
+                {/* Upcoming Badge */}
+                {isUpcoming && (
+                  <div className="px-3 py-1 rounded-full bg-green-500/90 text-white text-xs font-medium backdrop-blur shadow-lg">
+                    Upcoming
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
 
@@ -223,7 +190,7 @@ function EventSlide({ event, index, openLightbox, navigate, formatDate }) {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.6 }}
-            className={["flex flex-col p-6 md:p-8 rounded-2xl bg-black/70 backdrop-blur-md border border-white/10 h-[300px] lg:h-[420px] overflow-y-auto", isRight ? "lg:order-2" : "lg:order-1"].join(" ")}
+            className={["flex flex-col p-6 md:p-8 rounded-2xl bg-black/70 backdrop-blur-md border border-white/10 h-[300px] lg:h-[420px] overflow-y-auto", isRight ? "lg:order-1" : "lg:order-2"].join(" ")}
           >
             {/* Content wrapper */}
             <div className="space-y-4 flex-1">

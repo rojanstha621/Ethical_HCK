@@ -10,6 +10,7 @@ import {
   Radio,
   Globe2,
   ArrowRight,
+  Calendar,
 } from "lucide-react";
 
 const items = [
@@ -55,7 +56,19 @@ const items = [
     highlight: "Not rushing. Deep, patient learning.",
     icon: Radio,
     href: "/projects#research",
+
     tag: "Deep work",
+  },
+  {
+    id: "organize",
+    label: "Event Organization",
+    title: "Organize Events",
+    description:
+      "Empowering members to lead by organizing workshops and CTFs for fellow students. Builds leadership, networking, and deep technical mastery.",
+    highlight: "Lead, Network, Inspire.",
+    icon: Calendar,
+    href: "/events",
+    tag: "Leadership",
   },
   {
     id: "awareness",
@@ -119,9 +132,7 @@ function WhatWeDoSection() {
             <span className="font-mono uppercase tracking-[0.18em]">
               Learn • Research • Build • Secure
             </span>
-            <span className="mt-1 text-[11px] text-text-muted/80">
-              Cards below are clickable and lead to events or projects.
-            </span>
+
           </motion.div>
         </motion.div>
 
@@ -133,9 +144,8 @@ function WhatWeDoSection() {
           {items.map((item, index) => {
             const Icon = item.icon;
             return (
-              <motion.a
+              <motion.div
                 key={item.id}
-                href={item.href}
                 variants={gridReveal}
                 custom={index}
                 className="section-card group relative min-w-[80%] snap-start rounded-2xl border border-white/10 bg-black/70 backdrop-blur-md shadow-lg shadow-black/20 md:min-w-0 md:rounded-2xl"
@@ -176,14 +186,10 @@ function WhatWeDoSection() {
                       <span className="text-[10px] font-mono uppercase tracking-[0.16em] text-text-muted/80">
                         {index + 1 < 10 ? `0${index + 1}` : index + 1}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono tracking-[0.12em] text-accent-red/0 translate-x-2 opacity-0 transition-all duration-300 group-hover:text-accent-red group-hover:translate-x-0 group-hover:opacity-100">
-                        Read more
-                        <ArrowRight className="h-3 w-3" />
-                      </span>
                     </div>
                   </div>
                 </div>
-              </motion.a>
+              </motion.div>
             );
           })}
         </motion.div>

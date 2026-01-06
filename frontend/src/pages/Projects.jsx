@@ -7,7 +7,7 @@ import Lightbox from "../components/LightBox.jsx";
 import { convertDriveLinkToImageUrl } from "../utils/imageUtils.js";
 
 /* ---------------- Constants ---------------- */
-const PROJECTS_PER_PAGE = 6;
+
 
 /* ---------------- Animations ---------------- */
 const slideIn = (side) => ({
@@ -23,9 +23,7 @@ export default function Projects() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lightbox, setLightbox] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(PROJECTS_PER_PAGE);
   const navigate = useNavigate();
-  const showMoreRef = useRef(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -51,22 +49,7 @@ export default function Projects() {
     fetchProjects();
   }, []);
 
-  // Get visible projects based on current count
-  const visibleProjects = useMemo(() => {
-    return projects.slice(0, visibleCount);
-  }, [projects, visibleCount]);
 
-  const hasMoreProjects = visibleCount < projects.length;
-  const remainingProjects = projects.length - visibleCount;
-
-  const handleShowMore = () => {
-    setVisibleCount((prev) => Math.min(prev + PROJECTS_PER_PAGE, projects.length));
-    setTimeout(() => {
-      if (showMoreRef.current) {
-        showMoreRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    }, 100);
-  };
 
   if (loading) {
     return (
@@ -88,8 +71,31 @@ export default function Projects() {
 
   return (
     <div className="pt-20 relative min-h-screen">
-      <main className="h-[calc(100vh-80px)] overflow-y-auto snap-y snap-mandatory no-scrollbar">
-        {visibleProjects.map((project, index) => (
+      <main className="space-y-24 pb-20">
+        {/* Hero Section */}
+        <section className="py-10 md:py-20 relative">
+          <motion.div
+            className="max-w-4xl space-y-4 mx-auto text-center px-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted mx-auto">
+              <Folder className="h-3 w-3 text-accent-red" />
+              Community Projects
+            </div>
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl text-text-primary">
+              Our <span className="gradient-text">Projects</span>
+            </h1>
+            <p className="text-base md:text-lg text-text-muted max-w-2xl leading-relaxed mx-auto">
+              Explore open-source tools, scripts, and applications developed by our
+              talented community members. Contribute and learn.
+            </p>
+
+
+          </motion.div>
+        </section>
+        {projects.map((project, index) => (
           <ProjectSlide
             key={project._id || project.id}
             project={project}
@@ -98,61 +104,6 @@ export default function Projects() {
             navigate={navigate}
           />
         ))}
-
-        {/* Show More Section */}
-        {hasMoreProjects && (
-          <section
-            ref={showMoreRef}
-            className="snap-start min-h-[calc(100vh-100px)] flex items-center justify-center overflow-hidden relative"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center space-y-8 p-10 rounded-2xl bg-black/70 backdrop-blur-md border border-white/10"
-            >
-              <div className="space-y-2">
-                <p className="text-text-muted text-sm font-mono uppercase tracking-[0.2em]">
-                  {remainingProjects} more project{remainingProjects > 1 ? "s" : ""} to explore
-                </p>
-                <h2 className="font-heading text-3xl md:text-4xl text-text-primary">
-                  Want to see more?
-                </h2>
-              </div>
-
-              <motion.button
-                onClick={handleShowMore}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full border-2 border-accent-red bg-accent-red/10 text-accent-red text-lg font-mono uppercase tracking-[0.15em] hover:bg-accent-red hover:text-white transition-all duration-300 group"
-              >
-                <span>Show More Projects</span>
-                <ChevronDown className="h-5 w-5 group-hover:animate-bounce" />
-              </motion.button>
-
-              <p className="text-text-muted/60 text-xs">
-                Showing {visibleCount} of {projects.length} projects
-              </p>
-            </motion.div>
-          </section>
-        )}
-
-        {/* End Message when all projects are shown */}
-        {!hasMoreProjects && projects.length > PROJECTS_PER_PAGE && (
-          <section className="snap-start min-h-[50vh] flex items-center justify-center overflow-hidden relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center space-y-4"
-            >
-              <p className="text-text-muted text-sm font-mono uppercase tracking-[0.2em]">
-                You've seen all {projects.length} projects
-              </p>
-              <div className="w-16 h-1 bg-accent-red/50 mx-auto rounded-full" />
-            </motion.div>
-          </section>
-        )}
       </main>
 
       {lightbox && <Lightbox src={lightbox} onClose={() => setLightbox(null)} />}
@@ -175,9 +126,9 @@ function ProjectSlide({ project, index, openLightbox, navigate }) {
   return (
     <section
       ref={ref}
-      className="snap-start min-h-[calc(100vh-100px)] flex items-center overflow-hidden relative"
+      className="flex items-center relative py-10"
     >
-      <div className="container-cyber max-w-6xl -translate-y-10">
+      <div className="container-cyber max-w-6xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-16">
           {/* IMAGE */}
           <motion.div
