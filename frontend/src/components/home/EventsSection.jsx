@@ -113,7 +113,7 @@ function EventsSection() {
             variants={fadeUp}
             custom={index}
             onClick={() => navigate(`/events/${event._id || event.id}`)}
-            className="group relative rounded-2xl border border-border/70 bg-surface/80 backdrop-blur overflow-hidden cursor-pointer hover:border-accent-red/60 transition-all duration-300 hover:shadow-soft-glow"
+            className="group relative rounded-2xl border border-white/10 bg-black/70 backdrop-blur-md overflow-hidden cursor-pointer hover:border-accent-red/60 transition-all duration-300 hover:shadow-soft-glow"
           >
             {/* Image */}
             {event.image && (

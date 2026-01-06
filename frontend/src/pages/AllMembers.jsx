@@ -70,15 +70,15 @@ function AllMembers() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background pt-20 pb-20 flex items-center justify-center">
+      <div className="min-h-screen pt-20 pb-20 flex items-center justify-center">
         <Loader2 className="h-8 w-8 text-accent-red animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background pt-20 pb-20">
-      <div className="container-cyber space-y-14">
+    <div className="min-h-screen pt-20 pb-20">
+      <div className="container-cyber space-y-12">
 
         {/* Page Header */}
         <motion.div
@@ -130,7 +130,7 @@ function AllMembers() {
           </div>
         )}
 
-        {/* Grid */}
+        {/* Members List */}
         {filteredMembers.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-text-muted">No members found</p>
@@ -140,10 +140,7 @@ function AllMembers() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="
-              grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
-              gap-10 place-items-center
-            "
+            className="space-y-6"
           >
             {filteredMembers.map((member, i) => (
               <motion.div key={member._id || i} variants={gridReveal} custom={i}>
@@ -159,72 +156,57 @@ function AllMembers() {
 
 function MemberCardFull({ member }) {
   return (
-    <div
-      className="
-        member-card group
-        hover:shadow-[0_0_25px_rgba(0,198,255,0.25)]
-        hover:border-accent-red/70
-        transition-all duration-300
-        relative
-      "
-    >
-      {/* Parallax wrapper */}
-      <div className="relative h-[64%] w-full overflow-hidden group perspective-700">
-        <div className="transform transition-transform duration-700 group-hover:rotate-[2deg] group-hover:scale-105">
-          {member.photo ? (
-            <img
-              src={convertDriveLinkToImageUrl(member.photo)}
-              alt={member.name}
-              className="h-full w-full object-cover"
-              loading="lazy"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                if (e.target.nextSibling) {
-                  e.target.nextSibling.style.display = 'flex';
-                }
-              }}
-            />
-          ) : null}
-          {/* Fallback when no photo or photo fails to load */}
-          <div
-            className="flex h-full w-full items-center justify-center bg-gradient-to-br from-background via-surface to-background absolute inset-0"
-            style={{ display: member.photo ? 'none' : 'flex' }}
-          >
-            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted">
-              No Photo
-            </span>
-          </div>
+    <div className="group flex items-center gap-6 p-4 rounded-2xl border border-white/10 hover:border-accent-red/40 bg-black/60 backdrop-blur-md transition-all duration-300 hover:bg-black/70">
+      {/* Photo */}
+      <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden border border-border/50 group-hover:border-accent-red/50 transition-all duration-300 flex-shrink-0">
+        {member.photo ? (
+          <img
+            src={convertDriveLinkToImageUrl(member.photo)}
+            alt={member.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              if (e.target.nextSibling) {
+                e.target.nextSibling.style.display = 'flex';
+              }
+            }}
+          />
+        ) : null}
+        {/* Fallback when no photo */}
+        <div
+          className="flex h-full w-full items-center justify-center bg-gradient-to-br from-surface via-background to-surface absolute inset-0"
+          style={{ display: member.photo ? 'none' : 'flex' }}
+        >
+          <span className="text-2xl font-heading text-accent-red/50">
+            {member.name?.charAt(0)?.toUpperCase() || '?'}
+          </span>
         </div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
       </div>
 
-      {/* Member Info */}
-      <div className="flex h-[36%] flex-col items-center justify-center px-4 text-center">
-        <h3 className="font-heading text-base text-text-primary">
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        {/* Name */}
+        <h3 className="font-heading text-lg text-text-primary group-hover:text-accent-red transition-colors truncate">
           {member.name}
         </h3>
+
+        {/* Position */}
         {member.position && (
-          <p className="mt-1 text-[11px] uppercase tracking-[0.22em] text-accent-red">
+          <p className="mt-1 text-xs font-mono uppercase tracking-[0.15em] text-accent-red/80">
             {member.position}
           </p>
         )}
-        {member.email && (
-          <p className="mt-1 text-[11px] text-text-muted">{member.email}</p>
-        )}
 
-        {/* Socials */}
-        <div className="mt-3 flex items-center gap-3">
+        {/* Social Links - GitHub, LinkedIn, Instagram */}
+        <div className="mt-3 flex items-center gap-2">
           {member.github && (
             <a
               href={member.github}
               target="_blank"
               rel="noreferrer"
-              className="
-                flex h-8 w-8 items-center justify-center rounded-full
-                border border-border bg-background/80 text-text-muted
-                transition hover:border-accent-red hover:text-accent-red
-              "
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface/50 text-text-muted hover:border-accent-red hover:text-accent-red hover:bg-accent-red/10 transition-all duration-200"
+              title="GitHub"
             >
               <Github className="h-4 w-4" />
             </a>
@@ -235,11 +217,8 @@ function MemberCardFull({ member }) {
               href={member.linkedin}
               target="_blank"
               rel="noreferrer"
-              className="
-                flex h-8 w-8 items-center justify-center rounded-full
-                border border-border bg-background/80 text-text-muted
-                transition hover:border-accent-red hover:text-accent-red
-              "
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface/50 text-text-muted hover:border-accent-red hover:text-accent-red hover:bg-accent-red/10 transition-all duration-200"
+              title="LinkedIn"
             >
               <Linkedin className="h-4 w-4" />
             </a>
@@ -250,11 +229,8 @@ function MemberCardFull({ member }) {
               href={member.instagram}
               target="_blank"
               rel="noreferrer"
-              className="
-                flex h-8 w-8 items-center justify-center rounded-full
-                border border-border bg-background/80 text-text-muted
-                transition hover:border-accent-red hover:text-accent-red
-              "
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface/50 text-text-muted hover:border-accent-red hover:text-accent-red hover:bg-accent-red/10 transition-all duration-200"
+              title="Instagram"
             >
               <Instagram className="h-4 w-4" />
             </a>

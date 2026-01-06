@@ -233,7 +233,7 @@ function MemberCard({ member }) {
               target="_blank"
               rel="noreferrer"
               aria-label={`GitHub profile of ${member.name}`}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-border/80 bg-background/80 text-text-muted transition hover:border-accent-red hover:text-accent-red"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/50 text-text-muted transition hover:border-accent-red hover:text-accent-red"
             >
               <Github className="h-4 w-4" />
             </a>
@@ -245,7 +245,7 @@ function MemberCard({ member }) {
               target="_blank"
               rel="noreferrer"
               aria-label={`LinkedIn profile of ${member.name}`}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-border/80 bg-background/80 text-text-muted transition hover:border-accent-red hover:text-accent-red"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/50 text-text-muted transition hover:border-accent-red hover:text-accent-red"
             >
               <Linkedin className="h-4 w-4" />
             </a>
@@ -257,7 +257,7 @@ function MemberCard({ member }) {
               target="_blank"
               rel="noreferrer"
               aria-label={`Instagram profile of ${member.name}`}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-border/80 bg-background/80 text-text-muted transition hover:border-accent-red hover:text-accent-red"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/50 text-text-muted transition hover:border-accent-red hover:text-accent-red"
             >
               <Instagram className="h-4 w-4" />
             </a>

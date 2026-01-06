@@ -86,7 +86,7 @@ function WhatWeDoSection() {
           className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
         >
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-red" />
               What we do
             </div>
@@ -128,7 +128,7 @@ function WhatWeDoSection() {
                 href={item.href}
                 variants={fadeUp}
                 custom={index}
-                className="group relative min-w-[80%] snap-start rounded-2xl border border-border/70 bg-surface/80 shadow-lg shadow-black/20 transition-transform hover:-translate-y-1 hover:border-accent-red/60 hover:shadow-soft-glow md:min-w-0 md:rounded-2xl"
+                className="group relative min-w-[80%] snap-start rounded-2xl border border-white/10 bg-black/70 backdrop-blur-md shadow-lg shadow-black/20 transition-transform hover:-translate-y-1 hover:border-accent-red/60 hover:shadow-soft-glow md:min-w-0 md:rounded-2xl"
                 whileHover={{ translateY: -6 }}
                 transition={{ type: "spring", stiffness: 130, damping: 18 }}
               >
@@ -139,14 +139,14 @@ function WhatWeDoSection() {
                   {/* top row: icon + tag */}
                   <div className="mb-3 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-background/80 border border-border/80">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-black/50 border border-white/10">
                         <Icon className="h-4 w-4 text-accent-red transition-colors duration-300 group-hover:text-accent-redLight" />
                       </div>
                       <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted">
                         {item.label}
                       </span>
                     </div>
-                    <span className="rounded-full border border-border bg-background/80 px-2 py-0.5 text-[10px] text-text-muted">
+                    <span className="rounded-full border border-white/10 bg-black/50 px-2 py-0.5 text-[10px] text-text-muted">
                       {item.tag}
                     </span>
                   </div>

@@ -5,6 +5,7 @@ import MembersSection from "../components/home/MembersSection.jsx";
 import EventsSection from "../components/home/EventsSection.jsx";
 import ProjectsSection from "../components/home/ProjectsSection.jsx";
 import { useNavigate } from "react-router-dom";
+
 function Home() {
   const navigate = useNavigate();
   return (

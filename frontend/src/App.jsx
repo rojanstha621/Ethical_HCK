@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Layout from "./components/layout/Layout.jsx";
 import MatrixBackground from "./components/MatrixBackground";
 
@@ -15,9 +15,16 @@ import AdminLogin from "./pages/AdminLogin.jsx";
 import ProtectedRoute from "./components/admin/ProtectedRoute.jsx";
 
 function App() {
+  const location = useLocation();
+
+  // Check if current route is an admin route (admin login, dashboard, etc.)
+  const isAdminRoute = location.pathname.toLowerCase().startsWith("/admin");
+
   return (
     <div className="relative min-h-screen bg-background text-text-primary">
-      <MatrixBackground />
+      {/* Only show Matrix background on non-admin pages */}
+      {!isAdminRoute && <MatrixBackground />}
+
       {/* Clean minimal background - matching inredlabs style */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-black" />

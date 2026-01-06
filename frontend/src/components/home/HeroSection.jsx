@@ -54,10 +54,10 @@ function HeroSection() {
             ease: "easeInOut",
           }}
         />
-        
+
         {/* Grid overlay */}
         <div className="absolute inset-0 opacity-[0.18] bg-hero-grid bg-[length:24px_24px]" />
-        
+
         {/* Radial gradient overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,0,0,0.05),_transparent_60%)]" />
       </div>
@@ -71,7 +71,7 @@ function HeroSection() {
       >
         {/* Animated label with sparkle effect */}
         <motion.div
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-4 py-1.5 text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted backdrop-blur shadow-lg"
+          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-4 py-1.5 text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted backdrop-blur-md shadow-lg"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
@@ -153,7 +153,7 @@ function HeroSection() {
               transition={{ duration: 0.3 }}
             />
           </motion.button>
-          
+
           <motion.button
             type="button"
             className="btn-outline px-8 py-3 text-sm font-medium"
