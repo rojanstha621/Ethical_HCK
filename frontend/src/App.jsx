@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout.jsx";
+import MatrixBackground from "./components/MatrixBackground";
 
 import Home from "./pages/Home.jsx";
 import About from "./pages/About.jsx";
@@ -16,6 +17,7 @@ import ProtectedRoute from "./components/admin/ProtectedRoute.jsx";
 function App() {
   return (
     <div className="relative min-h-screen bg-background text-text-primary">
+      <MatrixBackground />
       {/* Clean minimal background - matching inredlabs style */}
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black to-black" />
