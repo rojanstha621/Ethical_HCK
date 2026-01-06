@@ -93,6 +93,42 @@ body {
   /* Firefox */
 }
 
+/* ===== Professional Card Hover Micro-interactions ===== */
+.section-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+
+.section-card:hover {
+  transform: scale(1.03) rotate(0.5deg);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.15), 0 0 60px rgba(255, 0, 0, 0.08);
+  border-color: rgba(255, 0, 0, 0.5);
+}
+
+/* Event card hover */
+.event-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+
+.event-card:hover {
+  transform: scale(1.03) rotate(0.3deg);
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.12), 0 0 50px rgba(255, 0, 0, 0.06);
+  border-color: rgba(255, 0, 0, 0.5);
+}
+
+/* Project card hover */
+.project-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+
+.project-card:hover {
+  transform: scale(1.03) rotate(-0.3deg);
+  box-shadow: 0 0 25px rgba(255, 0, 0, 0.12), 0 0 50px rgba(255, 0, 0, 0.06);
+  border-color: rgba(255, 0, 0, 0.5);
+}
+
 @keyframes members-scroll {
   0% {
     transform: translateX(0);
@@ -143,6 +179,60 @@ body {
 .members-marquee:active .members-marquee-track,
 .members-marquee:hover .members-marquee-track {
   animation-play-state: paused !important;
+}
+
+/* Events Marquee Animation */
+@keyframes events-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.events-marquee {
+  position: relative;
+  overflow: hidden;
+}
+
+.events-marquee-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: events-scroll 30s linear infinite;
+}
+
+.events-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Projects Marquee Animation */
+@keyframes projects-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.projects-marquee {
+  position: relative;
+  overflow: hidden;
+}
+
+.projects-marquee-track {
+  display: flex;
+  gap: 1.5rem;
+  width: max-content;
+  animation: projects-scroll 35s linear infinite;
+}
+
+.projects-marquee-track:hover {
+  animation-play-state: paused;
 }
 
 /* Animated centered title */

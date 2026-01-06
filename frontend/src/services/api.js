@@ -73,17 +73,17 @@ class ApiService {
     return this.request('/positions');
   }
 
-  async createPosition(name) {
+  async createPosition(name, order = 0) {
     return this.request('/positions', {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, order }),
     });
   }
 
-  async updatePosition(id, name) {
+  async updatePosition(id, name, order) {
     return this.request(`/positions/${id}`, {
       method: 'PUT',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ name, order }),
     });
   }
 

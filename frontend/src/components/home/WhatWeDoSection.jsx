@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { staggerContainer, fadeUp, fadeIn } from "../../lib/motion.js";
+import { fadeUp, gridReveal, staggerContainer, sectionReveal } from "../../lib/motion.js";
 import {
   Shield,
   Bug,
@@ -72,17 +72,18 @@ const items = [
 
 function WhatWeDoSection() {
   return (
-    <section className="py-10 md:py-16">
-      <motion.div
-        className="space-y-8"
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.25 }}
-      >
+    <motion.section
+      className="py-10 md:py-16"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.15 }}
+      variants={sectionReveal}
+    >
+      <div className="space-y-8">
         {/* Header */}
         <motion.div
           variants={fadeUp}
+          custom={0}
           className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between"
         >
           <div className="space-y-3">
@@ -91,19 +92,28 @@ function WhatWeDoSection() {
               What we do
             </div>
             <div className="space-y-1">
-              <h2 className="font-heading text-2xl md:text-3xl">
+              <motion.h2
+                variants={fadeUp}
+                custom={1}
+                className="font-heading text-2xl md:text-3xl"
+              >
                 Focused on learning, not noise.
-              </h2>
-              <p className="max-w-xl text-sm text-text-muted">
+              </motion.h2>
+              <motion.p
+                variants={fadeUp}
+                custom={2}
+                className="max-w-xl text-sm text-text-muted"
+              >
                 The community runs a small but consistent set of activities:
                 workshops, CTF-style problem solving, guided projects, and
                 security awareness work across campus.
-              </p>
+              </motion.p>
             </div>
           </div>
 
           <motion.div
-            variants={fadeIn}
+            variants={fadeUp}
+            custom={3}
             className="hidden text-xs text-text-muted md:flex md:flex-col md:items-end"
           >
             <span className="font-mono uppercase tracking-[0.18em]">
@@ -117,8 +127,8 @@ function WhatWeDoSection() {
 
         {/* Cards: horizontal scroll on mobile, grid on desktop */}
         <motion.div
-          variants={fadeIn}
           className="-mx-4 flex gap-4 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible"
+          variants={staggerContainer}
         >
           {items.map((item, index) => {
             const Icon = item.icon;
@@ -126,11 +136,9 @@ function WhatWeDoSection() {
               <motion.a
                 key={item.id}
                 href={item.href}
-                variants={fadeUp}
+                variants={gridReveal}
                 custom={index}
-                className="group relative min-w-[80%] snap-start rounded-2xl border border-white/10 bg-black/70 backdrop-blur-md shadow-lg shadow-black/20 transition-transform hover:-translate-y-1 hover:border-accent-red/60 hover:shadow-soft-glow md:min-w-0 md:rounded-2xl"
-                whileHover={{ translateY: -6 }}
-                transition={{ type: "spring", stiffness: 130, damping: 18 }}
+                className="section-card group relative min-w-[80%] snap-start rounded-2xl border border-white/10 bg-black/70 backdrop-blur-md shadow-lg shadow-black/20 md:min-w-0 md:rounded-2xl"
               >
                 {/* gradient ring */}
                 <div className="pointer-events-none absolute -inset-[1px] rounded-2xl bg-[radial-gradient(circle_at_top,_rgba(0,245,160,0.3),transparent_60%),radial-gradient(circle_at_bottom,_rgba(0,198,255,0.2),transparent_55%)] opacity-0 blur-[2px] transition-opacity duration-300 group-hover:opacity-100" />
@@ -182,7 +190,8 @@ function WhatWeDoSection() {
 
         {/* Mobile hint */}
         <motion.div
-          variants={fadeIn}
+          variants={fadeUp}
+          custom={5}
           className="mt-1 flex items-center justify-between text-[11px] text-text-muted md:hidden"
         >
           <span>Swipe horizontally to see more.</span>
@@ -190,8 +199,8 @@ function WhatWeDoSection() {
             Learn • Build • Secure
           </span>
         </motion.div>
-      </motion.div>
-    </section>
+      </div>
+    </motion.section>
   );
 }
 

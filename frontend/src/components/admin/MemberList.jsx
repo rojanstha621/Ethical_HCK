@@ -13,7 +13,9 @@ function MemberList() {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [showPositionModal, setShowPositionModal] = useState(false);
   const [newPositionName, setNewPositionName] = useState("");
+  const [newPositionOrder, setNewPositionOrder] = useState(0);
   const [positionLoading, setPositionLoading] = useState(false);
+  const [editingPosition, setEditingPosition] = useState(null);
 
   const fetchMembers = async () => {
     try {
@@ -64,11 +66,27 @@ function MemberList() {
 
     try {
       setPositionLoading(true);
-      await api.createPosition(newPositionName.trim());
+      await api.createPosition(newPositionName.trim(), newPositionOrder);
       setNewPositionName("");
+      setNewPositionOrder(0);
       fetchPositions();
     } catch (err) {
       setError(err.message || "Failed to add position");
+    } finally {
+      setPositionLoading(false);
+    }
+  };
+
+  const handleUpdatePosition = async () => {
+    if (!editingPosition || !editingPosition.name.trim()) return;
+
+    try {
+      setPositionLoading(true);
+      await api.updatePosition(editingPosition._id, editingPosition.name.trim(), editingPosition.order);
+      setEditingPosition(null);
+      fetchPositions();
+    } catch (err) {
+      setError(err.message || "Failed to update position");
     } finally {
       setPositionLoading(false);
     }
@@ -239,12 +257,15 @@ function MemberList() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="glass-panel p-6 max-w-md w-full mx-4"
+            className="glass-panel p-6 max-w-lg w-full mx-4"
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-heading">Manage Positions</h3>
               <button
-                onClick={() => setShowPositionModal(false)}
+                onClick={() => {
+                  setShowPositionModal(false);
+                  setEditingPosition(null);
+                }}
                 className="p-1 rounded hover:bg-surface transition-colors"
               >
                 <XIcon className="h-5 w-5" />
@@ -252,26 +273,40 @@ function MemberList() {
             </div>
 
             {/* Add new position */}
-            <div className="flex gap-2 mb-4">
-              <input
-                type="text"
-                value={newPositionName}
-                onChange={(e) => setNewPositionName(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleAddPosition()}
-                placeholder="New position name (e.g., Leader)"
-                className="flex-1 px-4 py-2 rounded-lg border border-border bg-background text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent-red/50"
-              />
-              <button
-                onClick={handleAddPosition}
-                disabled={positionLoading || !newPositionName.trim()}
-                className="px-4 py-2 rounded-lg bg-accent-red text-white hover:bg-accent-redDark transition-colors disabled:opacity-50"
-              >
-                {positionLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Plus className="h-4 w-4" />
-                )}
-              </button>
+            <div className="space-y-3 mb-6 p-4 rounded-lg border border-border bg-background/30">
+              <p className="text-sm font-medium text-text-primary">Add New Position</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newPositionName}
+                  onChange={(e) => setNewPositionName(e.target.value)}
+                  placeholder="Position name (e.g., Leader)"
+                  className="flex-1 px-4 py-2 rounded-lg border border-border bg-background text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent-red/50"
+                />
+                <input
+                  type="number"
+                  value={newPositionOrder}
+                  onChange={(e) => setNewPositionOrder(parseInt(e.target.value) || 0)}
+                  placeholder="Order"
+                  min="0"
+                  className="w-20 px-3 py-2 rounded-lg border border-border bg-background text-text-primary text-center focus:outline-none focus:ring-2 focus:ring-accent-red/50"
+                  title="Display order (0 = first)"
+                />
+                <button
+                  onClick={handleAddPosition}
+                  disabled={positionLoading || !newPositionName.trim()}
+                  className="px-4 py-2 rounded-lg bg-accent-red text-white hover:bg-accent-redDark transition-colors disabled:opacity-50"
+                >
+                  {positionLoading && !editingPosition ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Plus className="h-4 w-4" />
+                  )}
+                </button>
+              </div>
+              <p className="text-xs text-text-muted">
+                Order determines display sequence: 0 appears first, then 1, 2, etc.
+              </p>
             </div>
 
             {/* Position list */}
@@ -281,26 +316,78 @@ function MemberList() {
                   No positions added yet. Add your first position above.
                 </p>
               ) : (
-                positions.map((position) => (
-                  <div
-                    key={position._id}
-                    className="flex items-center justify-between p-3 rounded-lg border border-border bg-background/50"
-                  >
-                    <span className="text-text-primary">{position.name}</span>
-                    <button
-                      onClick={() => handleDeletePosition(position._id)}
-                      className="p-1 rounded hover:bg-surface transition-colors"
-                      title="Delete position"
+                [...positions]
+                  .sort((a, b) => (a.order || 0) - (b.order || 0))
+                  .map((position) => (
+                    <div
+                      key={position._id}
+                      className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background/50"
                     >
-                      <Trash2 className="h-4 w-4 text-text-muted hover:text-accent-red" />
-                    </button>
-                  </div>
-                ))
+                      {editingPosition && editingPosition._id === position._id ? (
+                        <>
+                          <input
+                            type="text"
+                            value={editingPosition.name}
+                            onChange={(e) =>
+                              setEditingPosition({ ...editingPosition, name: e.target.value })
+                            }
+                            className="flex-1 px-3 py-1.5 rounded border border-border bg-background text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-accent-red/50"
+                          />
+                          <input
+                            type="number"
+                            value={editingPosition.order || 0}
+                            onChange={(e) =>
+                              setEditingPosition({
+                                ...editingPosition,
+                                order: parseInt(e.target.value) || 0,
+                              })
+                            }
+                            min="0"
+                            className="w-16 px-2 py-1.5 rounded border border-border bg-background text-text-primary text-sm text-center focus:outline-none focus:ring-2 focus:ring-accent-red/50"
+                          />
+                          <button
+                            onClick={handleUpdatePosition}
+                            disabled={positionLoading}
+                            className="px-3 py-1.5 rounded bg-accent-red text-white text-xs hover:bg-accent-redDark transition-colors disabled:opacity-50"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => setEditingPosition(null)}
+                            className="px-3 py-1.5 rounded border border-border text-text-muted text-xs hover:bg-surface transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <span className="flex-1 text-text-primary">{position.name}</span>
+                          <span className="text-xs text-text-muted bg-surface px-2 py-1 rounded">
+                            Order: {position.order || 0}
+                          </span>
+                          <button
+                            onClick={() => setEditingPosition({ ...position })}
+                            className="p-1 rounded hover:bg-surface transition-colors"
+                            title="Edit position"
+                          >
+                            <Edit className="h-4 w-4 text-text-muted hover:text-accent-red" />
+                          </button>
+                          <button
+                            onClick={() => handleDeletePosition(position._id)}
+                            className="p-1 rounded hover:bg-surface transition-colors"
+                            title="Delete position"
+                          >
+                            <Trash2 className="h-4 w-4 text-text-muted hover:text-accent-red" />
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ))
               )}
             </div>
 
             <p className="text-xs text-text-muted mt-4">
-              Positions will appear as options when adding or editing members.
+              Positions with lower order numbers appear first on the website.
             </p>
           </motion.div>
         </div>

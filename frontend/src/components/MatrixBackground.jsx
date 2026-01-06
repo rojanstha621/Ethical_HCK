@@ -1,4 +1,6 @@
 import React, { useRef, useEffect } from "react";
+import { AiFillBug } from "react-icons/ai";
+
 
 // Customizable variables
 const DEFAULTS = {
@@ -55,6 +57,21 @@ const MatrixBackground = ({
   const animationRef = useRef();
   const particlesRef = useRef([]);
   const sizeRef = useRef({ width: 0, height: 0, colWidth: 0, colCount: 0 });
+
+  // Cyber Bug State
+  const bugRef = useRef({
+    active: false,
+    x: 0,
+    y: 0,
+    z: 0,
+    life: 0,
+    timer: 3, // Initial safe delay before first bug
+    nextDelay: 0
+  });
+
+  const bugDomRef = useRef(null);
+
+
 
   // Responsive resize
   useEffect(() => {
@@ -145,6 +162,65 @@ const MatrixBackground = ({
         ctx.restore();
       }
 
+      // --- CYBER BUG ANIMATION (DOM SYNC) ---
+      const bug = bugRef.current;
+      const bugEl = bugDomRef.current;
+
+      bug.timer -= dt;
+
+      // Spawn logic
+      if (!bug.active && bug.timer <= 0) {
+        bug.active = true;
+        bug.life = 0; // Tracks active time
+        bug.x = randomBetween(0, width);
+        bug.y = -50; // Start above screen
+        bug.z = randomBetween(minDepth, maxDepth);
+        bug.speed = randomBetween(minSpeed, maxSpeed) * 1.5; // Fall faster than rain
+        bug.nextDelay = randomBetween(3, 8);
+      }
+
+      if (bug.active && bugEl) {
+        bug.life += dt;
+
+        // 1. Logic: Fall Down naturally
+        bug.y += bug.speed * dt * bug.z;
+        bug.x += randomBetween(-0.5, 0.5) * bug.z; // Slight organic drift
+
+        // 2. Glitch Effect (First 0.4s)
+        let offsetX = 0;
+        let opacity = 1;
+        let scaleJitter = 1;
+
+        if (bug.life < 0.4) {
+          // Rapid random placement or opacity flicker
+          if (Math.random() > 0.5) opacity = 0.4;
+          if (Math.random() > 0.7) offsetX = randomBetween(-10, 10);
+          if (Math.random() > 0.7) scaleJitter = 1.2;
+        }
+
+        // 3. Project to Screen (Parallax)
+        const px = (bug.x + camX * (1 - bug.z)); // DOM handles scaling, so no dpr here for position if using pixels? 
+        // Wait, 'width' is window.innerWidth. termPx uses dpr for Canvas. 
+        // DOM elements use CSS pixels. So do NOT multiply by dpr for CSS transform.
+        const py = (bug.y + camY * (1 - bug.z));
+
+        // 4. Update DOM
+        const depthScale = (0.5 + 0.5 * bug.z) * scaleJitter;
+        bugEl.style.transform = `translate3d(${px + offsetX}px, ${py}px, 0) scale(${depthScale})`;
+        bugEl.style.opacity = opacity;
+
+        // Despawn check
+        if (bug.y > height + 50) {
+          bug.active = false;
+          bugEl.style.opacity = 0;
+          bug.timer = bug.nextDelay;
+        }
+      } else if (bugEl) {
+        bugEl.style.opacity = 0;
+      }
+
+
+
       animationRef.current = requestAnimationFrame(animate);
     }
 
@@ -167,23 +243,46 @@ const MatrixBackground = ({
   ]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        position: "fixed",
-        inset: 0,
-        width: "100vw",
-        height: "100vh",
-        zIndex: 0,
-        pointerEvents: "none",
-        userSelect: "none",
-        touchAction: "none",
-        background: "transparent",
-      }}
-      aria-hidden="true"
-      tabIndex={-1}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "fixed",
+          inset: 0,
+          width: "100vw",
+          height: "100vh",
+          zIndex: 0,
+          pointerEvents: "none",
+          userSelect: "none",
+          touchAction: "none",
+          background: "transparent",
+        }}
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+      {/* Cyber Bug Overlay */}
+      <div
+        ref={bugDomRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          pointerEvents: "none",
+          zIndex: 1, // Above canvas, below content
+          opacity: 0, // Hidden by default
+          color: "#ff0033",
+          filter: "drop-shadow(0 0 8px #ff0033) drop-shadow(0 0 15px #f00)",
+          willChange: "transform, opacity",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <AiFillBug size={32} />
+      </div>
+    </>
   );
 };
 
 export default MatrixBackground;
+

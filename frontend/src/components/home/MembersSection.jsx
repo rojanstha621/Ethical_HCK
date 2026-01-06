@@ -1,42 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Github, Linkedin, Instagram, Loader2 } from "lucide-react";
 import api from "../../services/api.js";
 import { convertDriveLinkToImageUrl } from "../../utils/imageUtils.js";
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.08,
-      duration: 0.5,
-      ease: [0.22, 0.61, 0.36, 1],
-    },
-  }),
-};
+import { fadeUp, gridReveal, staggerContainer, sectionReveal } from "../../lib/motion.js";
 
 function MembersSection() {
   const [members, setMembers] = useState([]);
+  const [positions, setPositions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMembers = async () => {
+    const fetchData = async () => {
       try {
-        const response = await api.getMembers();
-        if (response.success) {
-          setMembers(response.members || []);
+        const [membersRes, positionsRes] = await Promise.all([
+          api.getMembers(),
+          api.getPositions(),
+        ]);
+
+        if (membersRes.success) {
+          setMembers(membersRes.members || []);
         }
+        setPositions(positionsRes || []);
       } catch (error) {
-        console.error("Failed to fetch members:", error);
+        console.error("Failed to fetch data:", error);
         setMembers([]);
+        setPositions([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMembers();
+    fetchData();
   }, []);
 
   if (loading) {
@@ -50,10 +45,16 @@ function MembersSection() {
   }
 
   if (members.length === 0) {
-    return null; // Don't show section if no members
+    return null;
   }
 
-  // Group members by position for display
+  // Create a map of position names to their order
+  const positionOrderMap = positions.reduce((acc, pos) => {
+    acc[pos.name] = pos.order || 0;
+    return acc;
+  }, {});
+
+  // Group members by position
   const groupedByPosition = members.reduce((acc, member) => {
     const position = member.position || "Team Members";
     if (!acc[position]) {
@@ -63,22 +64,28 @@ function MembersSection() {
     return acc;
   }, {});
 
-  const positionGroups = Object.entries(groupedByPosition).map(([title, members]) => ({
-    title,
-    members,
-  }));
+  // Sort position groups by order
+  const positionGroups = Object.entries(groupedByPosition)
+    .map(([title, members]) => ({
+      title,
+      members,
+      order: positionOrderMap[title] !== undefined ? positionOrderMap[title] : 999,
+    }))
+    .sort((a, b) => a.order - b.order);
 
   return (
-    <section className="mt-16 space-y-10 border-t border-border/70 pt-12">
+    <motion.section
+      className="mt-16 space-y-10 border-t border-border/70 pt-12"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
+      variants={sectionReveal}
+    >
       {/* Section header */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.25 }}
-        className="space-y-3"
-      >
+      <motion.div className="space-y-3">
         <motion.p
           variants={fadeUp}
+          custom={0}
           className="text-xs font-mono uppercase tracking-[0.28em] text-accent-red"
         >
           Core Community
@@ -86,6 +93,7 @@ function MembersSection() {
 
         <motion.h2
           variants={fadeUp}
+          custom={1}
           className="font-heading text-2xl md:text-3xl"
         >
           People behind Ethical HCK Community
@@ -93,6 +101,7 @@ function MembersSection() {
 
         <motion.p
           variants={fadeUp}
+          custom={2}
           className="max-w-2xl text-sm text-text-muted"
         >
           A small, focused group of contributors who drive community operations,
@@ -100,90 +109,107 @@ function MembersSection() {
         </motion.p>
       </motion.div>
 
-      {/* One single "View All Members" */}
-      <div className="flex justify-end">
+      {/* View All Members */}
+      <motion.div variants={fadeUp} custom={3} className="flex justify-end">
         <a
           href="/members"
           className="text-xs font-mono uppercase tracking-[0.18em] text-text-muted hover:text-accent-red transition"
         >
           View all members
         </a>
-      </div>
+      </motion.div>
 
       <div className="space-y-14">
-        {positionGroups.map((group, index) => {
-          // Only duplicate members for marquee effect when there are 3+ members
-          const useMarquee = group.members.length >= 3;
-          const trackMembers = useMarquee
-            ? [...group.members, ...group.members]
-            : group.members;
-          const isFastRow = index % 2 === 1;
-
-          return (
-            <motion.div
-              key={group.title}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.25 }}
-              custom={index}
-              variants={fadeUp}
-              className="space-y-6"
-            >
-              {/* CENTERED TITLE WITH ANIMATION */}
-              <motion.div
-                variants={fadeUp}
-                className="relative flex items-center justify-center"
-              >
-                <div className="flex-grow border-t border-border/40"></div>
-                <div className="w-full text-center space-y-2">
-                  <h3 className="font-heading text-lg md:text-xl inline-block px-4">
-                    {group.title}
-                  </h3>
-
-                  {/* neon sweep line */}
-                  <div className="group-title-line"></div>
-                </div>
-
-
-                <div className="flex-grow border-t border-border/40"></div>
-              </motion.div>
-
-              {/* Show static centered layout for 1-2 members, marquee for 3+ */}
-              {useMarquee ? (
-                <div className="members-marquee" tabIndex={0} aria-label={group.title}>
-                  <div
-                    className={`members-marquee-track ${isFastRow ? "members-marquee-track--fast" : ""
-                      }`}
-                  >
-                    {trackMembers.map((member, idx) => (
-                      <MemberCard
-                        key={`${member._id || member.name}-${idx}`}
-                        member={member}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-wrap justify-center gap-6">
-                  {group.members.map((member) => (
-                    <MemberCard
-                      key={member._id || member.name}
-                      member={member}
-                    />
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          );
-        })}
+        {positionGroups.map((group, groupIndex) => (
+          <PositionSection
+            key={group.title}
+            group={group}
+            index={groupIndex}
+          />
+        ))}
       </div>
-    </section>
+    </motion.section>
   );
 }
 
-function MemberCard({ member }) {
+/* Position Section with Infinite Scroll */
+function PositionSection({ group, index }) {
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Duplicate members for seamless infinite scroll (need at least 3 for effect)
+  const useMarquee = group.members.length >= 3;
+  const trackMembers = useMarquee
+    ? [...group.members, ...group.members, ...group.members]
+    : group.members;
+
+  const isFastRow = index % 2 === 1;
+
   return (
-    <div className="member-card group hover:-translate-y-1 hover:scale-[1.02]">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={staggerContainer}
+      className="space-y-6"
+    >
+      {/* Position Title */}
+      <motion.div
+        variants={fadeUp}
+        custom={0}
+        className="relative flex items-center justify-center"
+      >
+        <div className="flex-grow border-t border-border/40"></div>
+        <div className="w-full text-center space-y-2">
+          <h3 className="font-heading text-lg md:text-xl inline-block px-4">
+            {group.title}
+          </h3>
+          <div className="group-title-line"></div>
+        </div>
+        <div className="flex-grow border-t border-border/40"></div>
+      </motion.div>
+
+      {/* Members Marquee/Grid */}
+      {useMarquee ? (
+        <div
+          className="members-marquee overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+        >
+          <div
+            className={`members-marquee-track ${isFastRow ? "members-marquee-track--fast" : ""}`}
+            style={{ animationPlayState: isPaused ? "paused" : "running" }}
+          >
+            {trackMembers.map((member, idx) => (
+              <MemberCard
+                key={`${member._id || member.name}-${idx}`}
+                member={member}
+                index={idx}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <motion.div
+          className="flex flex-wrap justify-center gap-6"
+          variants={staggerContainer}
+        >
+          {group.members.map((member, idx) => (
+            <motion.div key={member._id || member.name} variants={gridReveal} custom={idx}>
+              <MemberCard member={member} index={idx} />
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
+
+/* Member Card Component */
+function MemberCard({ member, index }) {
+  return (
+    <div className="member-card section-card group">
       <div className="relative h-[64%] w-full overflow-hidden">
         {member.photo ? (
           <img
