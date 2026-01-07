@@ -91,7 +91,7 @@ function HeroSection() {
   }, []);
 
   return (
-    <section ref={ref} className="relative flex min-h-screen items-center justify-center py-16 overflow-hidden bg-black">
+    <section ref={ref} className="relative flex min-h-screen items-center justify-center py-16 overflow-hidden">
       {/* Starfield Background */}
       <StarfieldBackground />
 

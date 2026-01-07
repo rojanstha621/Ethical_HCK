@@ -11,11 +11,11 @@ const HeroAnimation3D = () => {
     const isAnimatingRef = useRef(false);
 
     // Text reads correctly when placed on orbit
-    const orbitText = "  5 2 0 2  -  r a e Y   e h t   f o   y t i n u m m o C ";
+    const orbitText = "5 2 0 2  -  r a e Y   e h t  f o  ytin u m m o C";
 
     // Configuration - centered orbit around title
     const config = useMemo(() => ({
-        orbitRadiusX: 80,      // Horizontal radius (wider)
+        orbitRadiusX: 90,      // Horizontal radius (wider)
         orbitRadiusY: 0,       // Vertical radius (flatter ellipse)
         orbitOffsetY: 90,        // Center vertically with title
         orbitTilt: 0,          // Tilt angle in degrees (like Paramount)
