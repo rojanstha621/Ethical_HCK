@@ -1,8 +1,75 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown, Sparkles } from "lucide-react";
+import HeroAnimation3D from "./HeroAnimation3D";
 
 const rotatingWords = ["Learn.", "Research.", "Build.", "Secure."];
+
+// Gold Crown SVG Component
+const GoldCrown = () => (
+  <svg
+    viewBox="0 0 24 24"
+    className="absolute -top-6 left-0 w-6 h-6 md:w-8 md:h-8 transform -rotate-12"
+    style={{
+      filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 16px rgba(255, 215, 0, 0.5))',
+    }}
+  >
+    <path
+      d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5z"
+      fill="url(#goldGradient)"
+      stroke="#B8860B"
+      strokeWidth="0.5"
+    />
+    <defs>
+      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#FFD700" />
+        <stop offset="50%" stopColor="#FFA500" />
+        <stop offset="100%" stopColor="#FFD700" />
+      </linearGradient>
+    </defs>
+  </svg>
+);
+
+// Starfield Background Component
+const StarfieldBackground = () => {
+  const stars = Array.from({ length: 80 }, (_, i) => ({
+    id: i,
+    left: Math.random() * 100,
+    top: Math.random() * 100,
+    size: Math.random() * 2 + 1,
+    delay: Math.random() * 3,
+    duration: Math.random() * 2 + 2,
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {stars.map((star) => (
+        <motion.div
+          key={star.id}
+          className="absolute rounded-full bg-white"
+          style={{
+            left: `${star.left}%`,
+            top: `${star.top}%`,
+            width: star.size,
+            height: star.size,
+          }}
+          animate={{
+            opacity: [0.2, 0.8, 0.2],
+            scale: [1, 1.3, 1],
+          }}
+          transition={{
+            duration: star.duration,
+            delay: star.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+      {/* Cyber ambience glow */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black/50" />
+    </div>
+  );
+};
 
 function HeroSection() {
   const [wordIndex, setWordIndex] = useState(0);
@@ -24,12 +91,18 @@ function HeroSection() {
   }, []);
 
   return (
-    <section ref={ref} className="relative flex min-h-screen items-center justify-center py-16 overflow-hidden">
-      {/* Enhanced background with animated gradients */}
+    <section ref={ref} className="relative flex min-h-screen items-center justify-center py-16 overflow-hidden bg-black">
+      {/* Starfield Background */}
+      <StarfieldBackground />
+
+      {/* 3D Orbiting Text Animation */}
+      <HeroAnimation3D />
+
+      {/* Dark gradient overlays for depth */}
       <div className="pointer-events-none absolute inset-0">
-        {/* Animated gradient orbs */}
+        {/* Subtle red accents */}
         <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-red/10 rounded-full blur-3xl"
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-red/5 rounded-full blur-3xl"
           animate={{
             x: [0, 50, 0],
             y: [0, 30, 0],
@@ -42,7 +115,7 @@ function HeroSection() {
           }}
         />
         <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-red/10 rounded-full blur-3xl"
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-red/5 rounded-full blur-3xl"
           animate={{
             x: [0, -50, 0],
             y: [0, -30, 0],
@@ -56,10 +129,10 @@ function HeroSection() {
         />
 
         {/* Grid overlay */}
-        <div className="absolute inset-0 opacity-[0.18] bg-hero-grid bg-[length:24px_24px]" />
+        <div className="absolute inset-0 opacity-[0.08] bg-hero-grid bg-[length:24px_24px]" />
 
         {/* Radial gradient overlay */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,0,0,0.05),_transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,0,0,0.03),_transparent_60%)]" />
       </div>
 
       <motion.div
@@ -69,31 +142,21 @@ function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: [0.22, 0.61, 0.36, 1] }}
       >
-        {/* Animated label with sparkle effect */}
-        <motion.div
-          className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/70 px-4 py-1.5 text-[11px] font-mono uppercase tracking-[0.18em] text-text-muted backdrop-blur-md shadow-lg"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          <motion.span
-            className="h-1.5 w-1.5 rounded-full bg-accent-red"
-            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-          <span>Cybersecurity Collective</span>
-          <Sparkles className="h-3 w-3 text-accent-red/60" />
-        </motion.div>
 
-        {/* Main title with gradient text effect */}
+
+        {/* Main title with crown on E */}
         <motion.h1
           className="font-heading text-4xl leading-tight md:text-5xl lg:text-7xl mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
-          <span className="text-accent-red">
-            Ethical HCK
+          <span className="text-accent-red relative inline-block">
+            <span className="relative">
+              <GoldCrown />
+              E
+            </span>
+            thical HCK
           </span>
           <br />
           <span className="text-text-primary">Community</span>
