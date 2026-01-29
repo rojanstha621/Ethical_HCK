@@ -11,6 +11,11 @@ const memberSchema = new mongoose.Schema({
     trim: true,
     default: '',
   },
+  specialty: {
+    type: String,
+    trim: true,
+    default: '',
+  },
   email: {
     type: String,
     required: true,

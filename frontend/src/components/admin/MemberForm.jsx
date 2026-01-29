@@ -11,6 +11,7 @@ function MemberForm({ member = null, positions = [], onSuccess, onCancel }) {
   const [formData, setFormData] = useState({
     name: member?.name || "",
     position: member?.position || "",
+    specialty: member?.specialty || "",
     email: member?.email || "",
     github: member?.github || "",
     linkedin: member?.linkedin || "",
@@ -127,6 +128,21 @@ function MemberForm({ member = null, positions = [], onSuccess, onCancel }) {
                 ))}
               </select>
             )}
+          </div>
+
+          {/* Specialty */}
+          <div>
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Specialty
+            </label>
+            <input
+              type="text"
+              name="specialty"
+              value={formData.specialty}
+              onChange={handleChange}
+              className="w-full px-4 py-2 rounded-lg border border-border bg-background text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent-red/50 focus:border-accent-red/50"
+              placeholder="e.g. Web Security, Penetration Testing"
+            />
           </div>
 
           {/* Email */}

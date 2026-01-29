@@ -192,6 +192,11 @@ function MemberList() {
                             {member.position}
                           </p>
                         )}
+                        {member.specialty && (
+                          <p className="text-xs text-text-muted mt-0.5">
+                            {member.specialty}
+                          </p>
+                        )}
                       </div>
                       <div className="flex items-center gap-2">
                         <button

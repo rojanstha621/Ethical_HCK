@@ -248,6 +248,11 @@ function MemberCard({ member, index }) {
             {member.position}
           </p>
         )}
+        {member.specialty && (
+          <p className="mt-1 text-[11px] text-text-muted italic">
+            {member.specialty}
+          </p>
+        )}
         {member.email && (
           <p className="mt-1 text-[11px] text-text-muted">{member.email}</p>
         )}
