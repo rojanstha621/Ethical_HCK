@@ -121,10 +121,10 @@ function Footer() {
             <p className="text-sm text-text-muted">
               Phone:{" "}
               <a
-                href="tel:+9779812345678"
+                href="tel:9828988214"
                 className="transition hover:text-accent-green"
               >
-                +977 9812345678
+                9828988214
               </a>
             </p>
             <p className="text-sm text-text-muted">Kathmandu, Nepal</p>
@@ -168,7 +168,7 @@ function Footer() {
             </span>
             <span className="h-1 w-1 rounded-full bg-border" />
             <span className="text-[10px]">
-              Built by the Boss.
+              Made by Boss.
             </span>
           </div>
         </div>

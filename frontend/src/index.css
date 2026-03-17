@@ -251,3 +251,47 @@ body {
   100% { transform: translate(0, 0); }
 }
 
+/* Matrix-like binary stream overlay */
+.binary-rain {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.22;
+  mix-blend-mode: screen;
+}
+
+.binary-column {
+  position: absolute;
+  top: -140%;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  color: rgba(0, 245, 160, 0.85);
+  text-shadow: 0 0 8px rgba(0, 245, 160, 0.45);
+  white-space: nowrap;
+  animation-name: binary-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes binary-fall {
+  0% {
+    transform: translateY(-5%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(210%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .binary-rain {
+    display: none;
+  }
+}
+

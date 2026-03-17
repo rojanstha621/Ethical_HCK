@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Three.js Cyber Matrix Background</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --neon: #00ff66;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: #d8ffe5;
+      font-family: "JetBrains Mono", "Consolas", monospace;
+      overflow: hidden;
+    }
+
+    /* Fullscreen canvas behind all content */
+    #matrix-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Demo overlay content to prove it sits behind UI */
+    .overlay {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+    }
+
+    .overlay h1 {
+      margin: 0;
+      font-size: clamp(1.2rem, 3vw, 2.2rem);
+      font-weight: 600;
+    }
+
+    .overlay p {
+      margin-top: 0.75rem;
+      font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix-canvas"></canvas>
+
+  <div class="overlay">
+    <div>
+      <h1>Cybersecurity Interface</h1>
+      <p>Three.js Matrix Rain Background</p>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@latest/build/three.module.js";
+
+    // ------------------------
+    // Config (safe defaults)
+    // ------------------------
+    const CONFIG = {
+      // Optional global speed control (bonus requirement)
+      speedMultiplier: 1.0,
+      // Particle density scales with screen size
+      baseParticleCount: 2200,
+      maxParticleCount: 4200,
+      minParticleCount: 1400,
+      // Visual controls
+      neonColor: new THREE.Color("#00ff66"),
+      trailAlpha: 0.11, // higher = shorter trail, lower = longer trail
+      worldWidth: 140,
+      worldHeight: 100,
+      depthRange: 70,
+      pixelRatioCap: 1.5,
+      flickerStrength: 0.25,
+    };
+
+    const canvas = document.getElementById("matrix-canvas");
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: false,
+      powerPreference: "high-performance",
+    });
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, CONFIG.pixelRatioCap));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.autoClear = false;
+
+    // Main 3D scene for falling digits
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(
+      55,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      500
+    );
+    camera.position.z = 115;
+
+    // Fade scene draws a transparent black full-screen quad each frame.
+    // This creates the smooth trail effect instead of hard clearing.
+    const fadeScene = new THREE.Scene();
+    const fadeCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+    const fadeMaterial = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      transparent: true,
+      opacity: CONFIG.trailAlpha,
+      depthTest: false,
+      depthWrite: false,
+    });
+
+    const fadeQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), fadeMaterial);
+    fadeScene.add(fadeQuad);
+
+    // Build a tiny texture atlas with glowing "0" and "1".
+    // Left half is "0", right half is "1" for shader UV lookup.
+    function createDigitAtlasTexture() {
+      const w = 256;
+      const h = 128;
+      const atlas = document.createElement("canvas");
+      atlas.width = w;
+      atlas.height = h;
+      const ctx = atlas.getContext("2d");
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "900 98px monospace";
+
+      function drawDigit(char, cx) {
+        // Outer glow layers
+        ctx.shadowColor = "rgba(0,255,120,0.95)";
+        ctx.fillStyle = "rgba(0,255,120,0.25)";
+        ctx.shadowBlur = 26;
+        ctx.fillText(char, cx, h / 2);
+
+        ctx.fillStyle = "rgba(100,255,170,0.45)";
+        ctx.shadowBlur = 12;
+        ctx.fillText(char, cx, h / 2);
+
+        // Core bright glyph
+        ctx.shadowBlur = 3;
+        ctx.fillStyle = "rgba(210,255,220,1)";
+        ctx.fillText(char, cx, h / 2);
+      }
+
+      drawDigit("0", w * 0.25);
+      drawDigit("1", w * 0.75);
+
+      const texture = new THREE.CanvasTexture(atlas);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.generateMipmaps = false;
+      texture.colorSpace = THREE.SRGBColorSpace;
+      return texture;
+    }
+
+    const digitTexture = createDigitAtlasTexture();
+
+    // Column pool to keep x-positions matrix-like but still varied.
+    function createColumns(worldWidth, spacing = 2.1) {
+      const cols = [];
+      for (let x = -worldWidth * 0.5; x <= worldWidth * 0.5; x += spacing) {
+        cols.push(x + (Math.random() - 0.5) * 0.7);
+      }
+      return cols;
+    }
+
+    let columns = createColumns(CONFIG.worldWidth);
+
+    function computeParticleCount() {
+      const area = window.innerWidth * window.innerHeight;
+      const scaled = Math.round((area / (1920 * 1080)) * CONFIG.baseParticleCount);
+      return Math.max(CONFIG.minParticleCount, Math.min(CONFIG.maxParticleCount, scaled));
+    }
+
+    let count = computeParticleCount();
+
+    // Typed arrays for performance: one draw call, one BufferGeometry.
+    const positions = new Float32Array(count * 3);
+    const sizes = new Float32Array(count);
+    const speeds = new Float32Array(count);
+    const digits = new Float32Array(count);
+    const phases = new Float32Array(count);
+    const alphas = new Float32Array(count);
+
+    function resetParticle(i, spawnAtTop = false) {
+      const i3 = i * 3;
+      const x = columns[(Math.random() * columns.length) | 0];
+      const y = spawnAtTop
+        ? CONFIG.worldHeight * 0.5 + Math.random() * 20
+        : (Math.random() - 0.5) * CONFIG.worldHeight;
+      const z = (Math.random() - 0.5) * CONFIG.depthRange;
+
+      positions[i3] = x;
+      positions[i3 + 1] = y;
+      positions[i3 + 2] = z;
+
+      sizes[i] = 11 + Math.random() * 11;
+      speeds[i] = 8 + Math.random() * 26;
+      digits[i] = Math.random() < 0.5 ? 0 : 1;
+      phases[i] = Math.random() * Math.PI * 2;
+      alphas[i] = 0.28 + Math.random() * 0.72;
+    }
+
+    for (let i = 0; i < count; i++) resetParticle(i);
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("aSize", new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute("aSpeed", new THREE.BufferAttribute(speeds, 1));
+    geometry.setAttribute("aDigit", new THREE.BufferAttribute(digits, 1));
+    geometry.setAttribute("aPhase", new THREE.BufferAttribute(phases, 1));
+    geometry.setAttribute("aAlpha", new THREE.BufferAttribute(alphas, 1));
+
+    const material = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uTexture: { value: digitTexture },
+        uColor: { value: CONFIG.neonColor },
+        uTime: { value: 0 },
+        uFlickerStrength: { value: CONFIG.flickerStrength },
+      },
+      vertexShader: `
+        attribute float aSize;
+        attribute float aDigit;
+        attribute float aPhase;
+        attribute float aAlpha;
+
+        varying vec2 vUv;
+        varying float vAlpha;
+        varying float vDigit;
+        varying float vPhase;
+
+        void main() {
+          vUv = vec2(0.0);
+          vAlpha = aAlpha;
+          vDigit = aDigit;
+          vPhase = aPhase;
+
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          // Keep point size perspective-correct.
+          gl_PointSize = aSize * (120.0 / -mvPosition.z);
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D uTexture;
+        uniform vec3 uColor;
+        uniform float uTime;
+        uniform float uFlickerStrength;
+
+        varying float vAlpha;
+        varying float vDigit;
+        varying float vPhase;
+
+        void main() {
+          vec2 uv = gl_PointCoord;
+
+          // Pick left or right half of atlas based on digit (0/1)
+          uv.x = uv.x * 0.5 + (vDigit > 0.5 ? 0.5 : 0.0);
+          vec4 tex = texture2D(uTexture, uv);
+
+          // Soft circular falloff around each glyph sprite
+          vec2 c = gl_PointCoord - 0.5;
+          float radial = 1.0 - smoothstep(0.42, 0.5, length(c));
+
+          // Subtle random flicker for hacking vibe
+          float flicker = 1.0 + sin(uTime * 8.5 + vPhase) * uFlickerStrength;
+
+          float alpha = tex.a * radial * vAlpha * flicker;
+          vec3 color = mix(uColor * 0.7, vec3(0.9, 1.0, 0.9), tex.r);
+
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+    });
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    const clock = new THREE.Clock();
+    let globalTime = 0;
+
+    function updateParticles(delta) {
+      // CPU-side update is light because we only modify one typed array.
+      const halfHeight = CONFIG.worldHeight * 0.5;
+
+      for (let i = 0; i < count; i++) {
+        const i3 = i * 3;
+
+        positions[i3 + 1] -= speeds[i] * delta * CONFIG.speedMultiplier;
+
+        // Random digit flips while falling for extra matrix feel.
+        if (Math.random() < 0.01) digits[i] = digits[i] > 0.5 ? 0 : 1;
+
+        if (positions[i3 + 1] < -halfHeight - 10) {
+          resetParticle(i, true);
+        }
+      }
+
+      geometry.attributes.position.needsUpdate = true;
+      geometry.attributes.aDigit.needsUpdate = true;
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const delta = Math.min(clock.getDelta(), 0.033);
+      globalTime += delta;
+      material.uniforms.uTime.value = globalTime;
+
+      updateParticles(delta);
+
+      // Render transparent black quad to fade old frames (trail), then points.
+      renderer.render(fadeScene, fadeCamera);
+      renderer.render(scene, camera);
+    }
+
+    function onResize() {
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, CONFIG.pixelRatioCap));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+
+      // Rebuild column distribution and resize world width according to aspect.
+      CONFIG.worldWidth = 140 * camera.aspect;
+      columns = createColumns(CONFIG.worldWidth);
+    }
+
+    window.addEventListener("resize", onResize, { passive: true });
+
+    // Initial black frame and startup.
+    renderer.setClearColor(0x000000, 1);
+    renderer.clear(true, true, true);
+    onResize();
+    animate();
+  </script>
+</body>
+</html>

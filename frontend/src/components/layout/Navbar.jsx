@@ -1,6 +1,5 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Shield } from "lucide-react";
 
 const navItems = [
   { name: "Home", path: "/" },
@@ -15,20 +14,15 @@ function Navbar() {
       {/* subtle gradient line at bottom */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-accent-green via-accent-blue to-accent-green opacity-70" />
 
-      <div className="container-cyber flex h-16 items-center justify-between gap-4">
+      <div className="container-cyber flex h-20 items-center justify-between gap-4">
         {/* Left: Logo / wordmark */}
         <div className="flex items-center gap-3">
-          <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface/80 shadow-inner">
-            <div className="absolute inset-0 rounded-2xl bg-[conic-gradient(from_180deg_at_50%_50%,rgba(0,245,160,0.32),transparent_40%,rgba(0,198,255,0.32),transparent_80%)] opacity-30 blur-md" />
-            <Shield className="relative h-5 w-5 text-accent-green" />
-          </div>
-          <div className="leading-tight">
-            <div className="font-heading text-base uppercase tracking-[0.28em] text-text-primary">
-              Ethical HCK
-            </div>
-            <div className="text-[11px] font-mono text-text-muted">
-              ethical • focused • secure
-            </div>
+          <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface/90 p-1.5 shadow-inner">
+            <img
+              src="/logo.webp"
+              alt="Ethical HCK logo"
+              className="h-full w-full object-contain"
+            />
           </div>
         </div>
 

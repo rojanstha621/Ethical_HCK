@@ -105,13 +105,12 @@ function EventSlide({ event, index, openLightbox }) {
               <span className="text-text-muted">{event.category}</span>
             </div>
 
-            {/* Glitch Heading */}
-            <h2 className="font-heading text-3xl md:text-4xl text-text-primary neon-text glitch">
+            <h2 className="font-heading text-3xl md:text-4xl text-text-primary">
               {event.title}
             </h2>
 
             {event.subtitle && (
-              <p className="text-[12px] font-mono uppercase tracking-[0.35em] text-accent-blue neon-text">
+              <p className="text-[12px] font-mono uppercase tracking-[0.28em] text-accent-blue/90">
                 {event.subtitle}
               </p>
             )}
